@@ -8,3 +8,13 @@ export type TFormField = {
   type?: string;
   validation: z.ZodString;
 };
+
+import { ReactNode } from "react";
+
+export interface ISidebarItem {
+  type: string;
+  key: string;
+  path?: string;
+  children?: ISidebarItem[];
+  icon: ReactNode;
+}
