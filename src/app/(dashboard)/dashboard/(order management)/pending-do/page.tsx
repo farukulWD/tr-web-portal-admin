@@ -1,5 +1,7 @@
 import React from "react";
 
-export const PendingDOPage = () => {
+const PendingDOPage = () => {
   return <div>PendingDOPage</div>;
 };
+
+export default PendingDOPage;

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { sidebarItem } from "@/app/data/sidebarItems";
+import { sidebarItem } from "@/data/sidebarItems";
 import DownArrow from "../svg/DownArrow";
 
 const Sidebar = ({ asideClassName }: { asideClassName?: string }) => {
