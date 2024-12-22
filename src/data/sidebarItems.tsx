@@ -1,5 +1,6 @@
 import { DashboardIcon } from "@radix-ui/react-icons";
 import { ISidebarItem } from "../app/types/globalTypes";
+import { navData } from "@/types/navData";
 
 export const sidebarItem: ISidebarItem[] = [
   {
@@ -74,6 +75,79 @@ export const sidebarItem: ISidebarItem[] = [
         key: "Pending DO",
         type: "Pending DO",
         path: "/dashboard/pending-do",
+      },
+    ],
+  },
+];
+export const data: navData[] = [
+  {
+    title: "Administration",
+    url: "#",
+    items: [
+      {
+        title: "Order Management",
+        url: "#",
+        items: [
+          {
+            title: "All Order",
+            url: "/dashboard/admin/administration/order-management/all-order",
+          },
+          {
+            title: "Pending DO",
+            url: "/dashboard/admin/administration/order-management/pending-do",
+          },
+        ],
+      },
+      {
+        title: "Damage Entry",
+        url: "/dashboard/dealer/damage-entry",
+      },
+      {
+        title: "Incentive",
+        url: "/dashboard/dealer/incentive",
+      },
+      {
+        title: "Product List",
+        url: "/dashboard/dealer/product-list",
+      },
+      {
+        title: "Undelivered",
+        url: "/dashboard/dealer/undelivered",
+      },
+      {
+        title: "View Order",
+        url: "/dashboard/dealer/view-order",
+      },
+    ],
+  },
+  {
+    title: "Accounts",
+    url: "#",
+    items: [
+      {
+        title: "Profile",
+        url: "/dashboard/accounts/profile",
+      },
+      {
+        title: "Bank Info",
+        url: "/dashboard/accounts/bank-info",
+        // isActive: true,
+      },
+      {
+        title: "Change Password",
+        url: "/dashboard/accounts/change-password",
+      },
+      {
+        title: "Credit Info",
+        url: "/dashboard/accounts/credit-info",
+      },
+      {
+        title: "MR Info",
+        url: "/dashboard/accounts/mr-info",
+      },
+      {
+        title: "Nishchinto Fund",
+        url: "/dashboard/accounts/nishchinto-fund",
       },
     ],
   },
