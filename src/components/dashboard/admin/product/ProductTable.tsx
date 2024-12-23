@@ -18,7 +18,7 @@ const ProductTable = ({ data }: { data: ProductData[] }) => {
       item.code.toLowerCase().includes(text.toLocaleLowerCase())
   );
 
-  const columns: ColumnConfig<ProductData>[] = [
+  const columns: ColumnConfig<ProductData, ProductData[]>[] = [
     {
       key: "code",
       label: "Code",
@@ -48,13 +48,11 @@ const ProductTable = ({ data }: { data: ProductData[] }) => {
       key: "actions",
       label: "Actions",
       align: "center",
-      render: () => {
+      render: (value, item) => {
         return (
           <div className="flex justify-center items-center w-full">
             <Link
-              href={
-                "/dashboard/admin/administration/product-management/edit-product"
-              }
+              href={`/dashboard/admin/administration/product-management/add-product/?id:${item?.code}`}
               className="flex justify-center items-center w-full"
             >
               <Settings2 className="size-5 text-green-500 cursor-pointer" />

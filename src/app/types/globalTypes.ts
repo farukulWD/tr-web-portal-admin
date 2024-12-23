@@ -18,19 +18,23 @@ export interface ISidebarItem {
   children?: ISidebarItem[];
   icon: ReactNode;
 }
-export interface ColumnConfig<T> {
+export interface ColumnConfig<T, D> {
   key: string;
   label: string;
   align: "left" | "center" | "right" | undefined;
   width?: string;
-  render?: (value: any, item?: T | undefined) => React.ReactNode;
+  render?: (
+    value: any,
+    item?: T | undefined,
+    items?: D | []
+  ) => React.ReactNode;
 }
 export interface Column {
   key: string;
   label: string;
   align?: "left" | "center" | "right" | undefined;
   width?: string | undefined;
-  render?: (value: any, row: any | undefined) => React.ReactNode;
+  render?: (value: any, row: any | undefined, array: any[]) => React.ReactNode;
 }
 
 export interface Footer {
