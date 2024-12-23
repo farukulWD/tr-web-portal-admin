@@ -56,7 +56,7 @@ const GlobalTable: React.FC<GlobalTableProps> = ({
                     }`}
                   >
                     {column.render
-                      ? column.render(row[column.key], row)
+                      ? column.render(row[column.key], row, data)
                       : row[column.key]}
                   </TableCell>
                 ))}
