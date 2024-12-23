@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { TFormField } from "@/app/types/globalTypes";
+import { TFormField } from "@/types/globalTypes";
 import { z } from "zod";
 
 import {

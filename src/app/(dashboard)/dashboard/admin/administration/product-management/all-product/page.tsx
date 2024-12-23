@@ -5,6 +5,7 @@ import React from "react";
 
 async function AllProduct() {
   const data = await getProducts();
+
   return (
     <>
       <ProductTable data={data} />

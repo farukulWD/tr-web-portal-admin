@@ -1,5 +1,5 @@
 "use client";
-import { ColumnConfig } from "@/app/types/globalTypes";
+import { ColumnConfig } from "@/types/globalTypes";
 import GlobalTable from "@/components/shared/global/GlobalTable";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ const ProductTable = ({ data }: { data: IProduct[] }) => {
       key: "name",
       label: "Name",
       align: "center",
+      width: "w-1/4",
     },
     {
       key: "price",

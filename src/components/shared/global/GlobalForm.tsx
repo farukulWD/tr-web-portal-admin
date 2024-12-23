@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { TFormField } from "@/app/types/globalTypes";
+import { TFormField } from "@/types/globalTypes";
 import { Eye, EyeClosed } from "lucide-react";
 
 const GlobalForm = ({

@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Column, Footer } from "@/app/types/globalTypes";
+import { Column, Footer } from "@/types/globalTypes";
 
 interface GlobalTableProps {
   columns: Column[];
