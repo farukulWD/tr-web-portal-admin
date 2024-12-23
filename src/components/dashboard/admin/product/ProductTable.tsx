@@ -7,20 +7,20 @@ import React, { useState } from "react";
 
 import { Settings2, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { ProductData } from "@/app/(dashboard)/dashboard/admin/administration/product-management/all-product/page";
+import { IProduct } from "@/types/productType";
 
-const ProductTable = ({ data }: { data: ProductData[] }) => {
+const ProductTable = ({ data }: { data: IProduct[] }) => {
   const [text, setText] = useState("");
 
   const newFilteredData = data.filter(
     (item) =>
       item.name.toLowerCase().includes(text.toLocaleLowerCase()) ||
-      item.code.toLowerCase().includes(text.toLocaleLowerCase())
+      item.productCode.toLowerCase().includes(text.toLocaleLowerCase())
   );
 
-  const columns: ColumnConfig<ProductData, ProductData[]>[] = [
+  const columns: ColumnConfig<IProduct>[] = [
     {
-      key: "code",
+      key: "productCode",
       label: "Code",
       align: "center",
     },
@@ -52,7 +52,7 @@ const ProductTable = ({ data }: { data: ProductData[] }) => {
         return (
           <div className="flex justify-center items-center w-full">
             <Link
-              href={`/dashboard/admin/administration/product-management/add-product/?id:${item?.code}`}
+              href={`/dashboard/admin/administration/product-management/add-product/?id=${item?._id}`}
               className="flex justify-center items-center w-full"
             >
               <Settings2 className="size-5 text-green-500 cursor-pointer" />

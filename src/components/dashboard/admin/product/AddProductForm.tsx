@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -17,46 +17,73 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-// import Image from "next/image";
+import { getProductById } from "@/api/productApi";
+import { useSearchParams } from "next/navigation";
 
-const productSchema = z.object({
+const productValidationSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
   price: z.number().min(0, {
-    message: "(Price must be a positive number.)",
+    message: "Price must be a positive number.",
   }),
   description: z.string().optional(),
-  quantity: z.number().int().min(0, {
-    message: "(Quantity must be a non-negative integer.)",
+  stock: z.number().int().min(0, {
+    message: "Stock must be a non-negative integer.",
   }),
   group: z.string().optional(),
   productCode: z.string().optional(),
   image: z.string().url().optional(),
 });
 
-type ProductFormValues = z.infer<typeof productSchema>;
+type ProductFormValues = z.infer<typeof productValidationSchema>;
 
 export function AddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [file, setFile] = useState<File | null>(null); // State to handle file input
+  const searchParams = useSearchParams();
+  const queryId = searchParams.get("id");
+
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productValidationSchema),
     defaultValues: {
       name: "",
       price: 0,
       description: "",
-      quantity: 0,
+      stock: 0,
       group: "",
       productCode: "",
       image: "",
     },
   });
-  console.log({ form });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (queryId) {
+      (async () => {
+        const result = await getProductById(queryId.toString());
+        // setProduct(result);
+        if (result) {
+          reset(result); // Update form values dynamically
+        }
+      })();
+    }
+  }, [queryId, reset]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0] || null;
+    setFile(selectedFile);
+  };
+
   async function onSubmit(data: ProductFormValues) {
     setIsSubmitting(true);
     try {
       console.log(data);
+      if (file) {
+        console.log("Selected file:", file);
+      }
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       alert("Product submitted successfully!");
@@ -94,7 +121,7 @@ export function AddProductForm() {
           name="price"
           render={({ field }) => (
             <FormItem>
-              <div className="flex justify-between  h-3">
+              <div className="flex justify-between h-3">
                 <FormLabel>
                   Price <span className="text-destructive">*</span>
                 </FormLabel>
@@ -132,7 +159,7 @@ export function AddProductForm() {
         />
         <FormField
           control={form.control}
-          name="quantity"
+          name="stock"
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between h-3">
@@ -191,46 +218,26 @@ export function AddProductForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => {
-            console.log({ field });
-            return (
-              <FormItem>
-                <div className="flex justify-between h-3">
-                  <FormLabel>Image URL</FormLabel>
-                  <FormMessage className="text-[0.7rem]" />
-                </div>
-                <FormControl className="relative  h-32 w-full border-dashed border-2 border-gray-300 rounded-lg">
-                  <div>
-                    <Input
-                      placeholder="https://example.com/image.jpg"
-                      {...field}
-                      type="file"
-                      className="opacity-0 w-full h-full absolute inset-0"
-                    />
-                    <div className="flex flex-col items-center justify-center h-full text-center font-semibold text-gray-400 gap-2">
-                      Drag and drop to added your image
-                      <br />
-                      or click to browse your files
-                      <Button>Browse File</Button>
-                    </div>
-                    {/* <div className="flex flex-col items-center justify-center h-full text-center font-semibold text-gray-400 gap-2">
-                      <img
-                        src={field.value}
-                        alt="image"
-                        width={100}
-                        height={100}
-                      />
-                      <Button>Browse File</Button>
-                    </div> */}
-                  </div>
-                </FormControl>
-              </FormItem>
-            );
-          }}
-        />
+        <FormItem>
+          <div className="flex justify-between h-3">
+            <FormLabel>Image</FormLabel>
+          </div>
+          <FormControl>
+            <div className="relative h-32 w-full border-dashed border-2 border-gray-300 rounded-lg">
+              <input
+                type="file"
+                className="opacity-0 w-full h-full absolute inset-0"
+                onChange={handleFileChange}
+              />
+              <div className="flex flex-col items-center justify-center h-full text-center font-semibold text-gray-400 gap-2">
+                Drag and drop to add your image
+                <br />
+                or click to browse your files
+                <Button>Browse File</Button>
+              </div>
+            </div>
+          </FormControl>
+        </FormItem>
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}
         </Button>

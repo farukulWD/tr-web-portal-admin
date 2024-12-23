@@ -22,8 +22,9 @@ import {
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { data } from "@/data/sidebarItems";
+
 import { navData } from "@/types/navData";
+import { sideBarData } from "@/data/sidebarItems";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const path = usePathname();
@@ -70,22 +71,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href={"/dashboard"}>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Documentation</span>
-                  <span className="">v1.0.0</span>
+                  <span className="font-semibold">Tr</span>
+                  {/* <span className="">v1.0.0</span> */}
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu>{renderItems(data)}</SidebarMenu>
+          <SidebarMenu>{renderItems(sideBarData)}</SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
       <SidebarRail />

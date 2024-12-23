@@ -18,7 +18,7 @@ export interface ISidebarItem {
   children?: ISidebarItem[];
   icon: ReactNode;
 }
-export interface ColumnConfig<T, D> {
+export interface ColumnConfig<T> {
   key: string;
   label: string;
   align: "left" | "center" | "right" | undefined;
@@ -26,7 +26,7 @@ export interface ColumnConfig<T, D> {
   render?: (
     value: any,
     item?: T | undefined,
-    items?: D | []
+    items?: T[] | []
   ) => React.ReactNode;
 }
 export interface Column {
