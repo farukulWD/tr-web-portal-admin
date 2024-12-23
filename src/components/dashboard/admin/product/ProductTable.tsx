@@ -4,7 +4,10 @@ import GlobalTable from "@/components/shared/global/GlobalTable";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
-import { ProductData } from "./ProductList";
+
+import { Settings2, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { ProductData } from "@/app/(dashboard)/dashboard/admin/administration/product-management/all-product/page";
 
 const ProductTable = ({ data }: { data: ProductData[] }) => {
   const [text, setText] = useState("");
@@ -14,7 +17,7 @@ const ProductTable = ({ data }: { data: ProductData[] }) => {
       item.name.toLowerCase().includes(text.toLocaleLowerCase()) ||
       item.code.toLowerCase().includes(text.toLocaleLowerCase())
   );
-  console.log(newFilteredData);
+
   const columns: ColumnConfig<ProductData>[] = [
     {
       key: "code",
@@ -40,6 +43,28 @@ const ProductTable = ({ data }: { data: ProductData[] }) => {
       key: "stock",
       label: "Stock",
       align: "center",
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      align: "center",
+      render: () => {
+        return (
+          <div className="flex justify-center items-center w-full">
+            <Link
+              href={
+                "/dashboard/admin/administration/product-management/edit-product"
+              }
+              className="flex justify-center items-center w-full"
+            >
+              <Settings2 className="size-5 text-green-500 cursor-pointer" />
+            </Link>
+            <div className="flex justify-center items-center w-full">
+              <Trash2 className="size-5 text-destructive cursor-pointer" />
+            </div>
+          </div>
+        );
+      },
     },
   ];
   return (
