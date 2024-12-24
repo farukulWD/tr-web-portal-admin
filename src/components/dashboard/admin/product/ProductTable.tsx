@@ -12,7 +12,7 @@ import { useGetPostsQuery } from "@/redux/api/apiSlice";
 
 const ProductTable = ({ data }: { data: IProduct[] }) => {
   const [text, setText] = useState("");
-  const { data: post } = useGetPostsQuery();
+  const { data: post } = useGetPostsQuery({});
   console.log(post);
   const newFilteredData = data.filter(
     (item) =>
