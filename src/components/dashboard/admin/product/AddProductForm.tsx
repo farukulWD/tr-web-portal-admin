@@ -98,146 +98,165 @@ export function AddProductForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>
-                  Name <span className="text-destructive">*</span>
-                </FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Input placeholder="Product name" {...field} />
-              </FormControl>
-              <FormDescription>Enter the name of the product.</FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>
-                  Price <span className="text-destructive">*</span>
-                </FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="0.00"
-                  {...field}
-                  onChange={(e) => field.onChange(parseFloat(e.target.value))}
-                />
-              </FormControl>
-              <FormDescription>Enter the price of the product.</FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>Description</FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Textarea placeholder="Product description" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter a description of the product (optional).
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="stock"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>
-                  Quantity <span className="text-destructive">*</span>
-                </FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-                />
-              </FormControl>
-              <FormDescription>
-                Enter the quantity of the product in stock.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="group"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>Group</FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Input placeholder="Product group" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the group this product belongs to (optional).
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="productCode"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex justify-between h-3">
-                <FormLabel>Product Code</FormLabel>
-                <FormMessage className="text-[0.7rem]" />
-              </div>
-              <FormControl>
-                <Input placeholder="Product code" {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the product code (optional).
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <FormItem>
-          <div className="flex justify-between h-3">
-            <FormLabel>Image</FormLabel>
-          </div>
-          <FormControl>
-            <div className="relative h-32 w-full border-dashed border-2 border-gray-300 rounded-lg">
-              <input
-                type="file"
-                className="opacity-0 w-full h-full absolute inset-0"
-                onChange={handleFileChange}
-              />
-              <div className="flex flex-col items-center justify-center h-full text-center font-semibold text-gray-400 gap-2">
-                Drag and drop to add your image
-                <br />
-                or click to browse your files
-                <Button>Browse File</Button>
-              </div>
+        <div className="w-full lg:flex gap-5">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>
+                    Name <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Input placeholder="Product name" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the name of the product.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="group"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>Group</FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Input placeholder="Product group" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the group this product belongs to (optional).
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="w-full lg:flex gap-5">
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>
+                    Price <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="0.00"
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter the price of the product.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="stock"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>
+                    Quantity <span className="text-destructive">*</span>
+                  </FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(parseInt(e.target.value, 10))
+                    }
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter the quantity of the product in stock.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="productCode"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>Product Code</FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Input placeholder="Product code" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the product code (optional).
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="flex justify-between h-3">
+                  <FormLabel>Description</FormLabel>
+                  <FormMessage className="text-[0.7rem]" />
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="Product description"
+                    rows={10}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter a description of the product (optional).
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormItem>
+            <div className="flex justify-between h-3">
+              <FormLabel>Image</FormLabel>
             </div>
-          </FormControl>
-        </FormItem>
+            <FormControl>
+              <div className="relative h-52 w-full border-dashed border-2 border-gray-300 rounded-lg">
+                <input
+                  type="file"
+                  className="opacity-0 w-full h-full absolute inset-0"
+                  onChange={handleFileChange}
+                />
+                <div className="flex flex-col items-center justify-center h-full text-center font-semibold text-gray-400 gap-2">
+                  Drag and drop to add your image
+                  <br />
+                  or click to browse your files
+                  <Button>Browse File</Button>
+                </div>
+              </div>
+            </FormControl>
+          </FormItem>
+        </div>
+
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit"}
         </Button>
