@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { getProductById } from "@/api/productApi";
 import { useSearchParams } from "next/navigation";
+import { useCreateProductMutation } from "@/redux/api/productApi";
 
 const productValidationSchema = z.object({
   name: z.string().min(2, {
@@ -40,8 +41,7 @@ type ProductFormValues = z.infer<typeof productValidationSchema>;
 
 export function AddProductForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [file, setFile] = useState<File | null>(null); // State to handle file input
+  const [file, setFile] = useState<File | null>(null);
   const searchParams = useSearchParams();
   const queryId = searchParams.get("id");
 
@@ -52,21 +52,21 @@ export function AddProductForm() {
       price: 0,
       description: "",
       stock: 0,
-      group: "",
-      productCode: "",
-      image: "",
+      // group: "",
+      // productCode: "",
+      // image: "",
     },
   });
 
   const { reset } = form;
+  const [createProduct] = useCreateProductMutation(); // Hook usage
 
   useEffect(() => {
     if (queryId) {
       (async () => {
         const result = await getProductById(queryId.toString());
-        // setProduct(result);
         if (result) {
-          reset(result); // Update form values dynamically
+          reset(result);
         }
       })();
     }
@@ -80,12 +80,26 @@ export function AddProductForm() {
   async function onSubmit(data: ProductFormValues) {
     setIsSubmitting(true);
     try {
-      console.log(data);
-      if (file) {
-        console.log("Selected file:", file);
-      }
+      // const formData = new FormData();
+      // formData.append("name", data.name);
+      // formData.append("price", data.price.toString());
+      // formData.append("description", data.description || "");
+      // formData.append("stock", data.stock.toString());
+      // // Uncomment the following lines to include additional fields
+      // // formData.append("group", data.group || "");
+      // // formData.append("productCode", data.productCode || "");
+      // if (file) {
+      //   formData.append("image", file);
+      // }
+      const productData: ProductFormValues = {
+        name: data.name,
+        price: data?.price,
+        description: data?.description,
+        stock: data?.stock,
+        // group: data?.group,
+      };
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await createProduct(data);
       alert("Product submitted successfully!");
     } catch (error) {
       console.error("Error submitting product:", error);
@@ -94,7 +108,6 @@ export function AddProductForm() {
       setIsSubmitting(false);
     }
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -156,7 +169,9 @@ export function AddProductForm() {
                     type="number"
                     placeholder="0.00"
                     {...field}
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.onChange(parseFloat(e.target.value) || 0)
+                    }
                   />
                 </FormControl>
                 <FormDescription>
@@ -182,7 +197,7 @@ export function AddProductForm() {
                     placeholder="0"
                     {...field}
                     onChange={(e) =>
-                      field.onChange(parseInt(e.target.value, 10))
+                      field.onChange(parseInt(e.target.value, 10) || 0)
                     }
                   />
                 </FormControl>
@@ -250,7 +265,7 @@ export function AddProductForm() {
                   Drag and drop to add your image
                   <br />
                   or click to browse your files
-                  <Button>Browse File</Button>
+                  <Button type="button">Browse File</Button>
                 </div>
               </div>
             </FormControl>

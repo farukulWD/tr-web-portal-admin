@@ -8,12 +8,10 @@ import React, { useState } from "react";
 import { Settings2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { IProduct } from "@/types/productType";
-import { useGetPostsQuery } from "@/redux/api/apiSlice";
 
 const ProductTable = ({ data }: { data: IProduct[] }) => {
   const [text, setText] = useState("");
-  const { data: post } = useGetPostsQuery({});
-  console.log(post);
+
   const newFilteredData = data.filter(
     (item) =>
       item.name.toLowerCase().includes(text.toLocaleLowerCase()) ||
