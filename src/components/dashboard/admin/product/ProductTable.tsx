@@ -8,14 +8,22 @@ import React, { useState } from "react";
 import { Settings2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { IProduct } from "@/types/productType";
+import { useGetProductsQuery } from "@/redux/api/productApi";
+import GlobalSkeletonTable from "@/components/shared/global/GlobalSkeletonTable";
 
-const ProductTable = ({ data }: { data: IProduct[] }) => {
+const ProductTable = () => {
   const [text, setText] = useState("");
+  const { data, isLoading, isError } = useGetProductsQuery({});
 
-  const newFilteredData = data.filter(
+  // if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading products</p>;
+
+  const products: IProduct[] = data?.data; // Extracting the products array from `data`
+
+  const filteredData = products?.filter(
     (item) =>
-      item.name.toLowerCase().includes(text.toLocaleLowerCase()) ||
-      item.productCode.toLowerCase().includes(text.toLocaleLowerCase())
+      item.name.toLowerCase().includes(text.toLowerCase()) ||
+      item.productCode.toLowerCase().includes(text.toLowerCase())
   );
 
   const columns: ColumnConfig<IProduct>[] = [
@@ -36,11 +44,6 @@ const ProductTable = ({ data }: { data: IProduct[] }) => {
       align: "center",
     },
     {
-      key: "fu",
-      label: "F/U",
-      align: "center",
-    },
-    {
       key: "stock",
       label: "Stock",
       align: "center",
@@ -49,7 +52,7 @@ const ProductTable = ({ data }: { data: IProduct[] }) => {
       key: "actions",
       label: "Actions",
       align: "center",
-      render: (value, item) => {
+      render: (_, item) => {
         return (
           <div className="flex justify-center items-center w-full">
             <Link
@@ -66,6 +69,7 @@ const ProductTable = ({ data }: { data: IProduct[] }) => {
       },
     },
   ];
+
   return (
     <>
       <div>
@@ -77,7 +81,11 @@ const ProductTable = ({ data }: { data: IProduct[] }) => {
           onChange={(e) => setText(e.target.value)}
         />
       </div>
-      <GlobalTable columns={columns} data={newFilteredData} />;
+      {isLoading ? (
+        <GlobalSkeletonTable />
+      ) : (
+        <GlobalTable columns={columns} data={filteredData} />
+      )}
     </>
   );
 };

@@ -17,9 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getProductById } from "@/api/productApi";
+
 import { useSearchParams } from "next/navigation";
-import { useCreateProductMutation } from "@/redux/api/productApi";
+import {
+  useCreateProductMutation,
+  useGetProductsByIdQuery,
+  useUpdatedProductMutation,
+} from "@/redux/api/productApi";
 
 const productValidationSchema = z.object({
   name: z.string().min(2, {
@@ -60,17 +64,21 @@ export function AddProductForm() {
 
   const { reset } = form;
   const [createProduct] = useCreateProductMutation(); // Hook usage
-
+  const [updatedProduct] = useUpdatedProductMutation();
+  const { data } = useGetProductsByIdQuery(
+    {
+      _id: queryId?.toString() as string,
+    },
+    { skip: !queryId }
+  );
   useEffect(() => {
     if (queryId) {
-      (async () => {
-        const result = await getProductById(queryId.toString());
-        if (result) {
-          reset(result);
-        }
-      })();
+      const result = data?.data;
+      if (result) {
+        reset(result);
+      }
     }
-  }, [queryId, reset]);
+  }, [queryId, reset, data?.data]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null;
@@ -96,10 +104,14 @@ export function AddProductForm() {
         price: data?.price,
         description: data?.description,
         stock: data?.stock,
-        // group: data?.group,
+        group: data?.group,
       };
+      if (!queryId) {
+        await createProduct(productData);
+      } else {
+        await updatedProduct({ _id: queryId, body: { ...productData } });
+      }
 
-      await createProduct(data);
       alert("Product submitted successfully!");
     } catch (error) {
       console.error("Error submitting product:", error);
