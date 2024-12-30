@@ -5,6 +5,7 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/v1/product",
   }),
+  tagTypes: ["product"],
   endpoints: (builder) => ({
     createProduct: builder.mutation({
       query: (formData) => ({
@@ -12,12 +13,14 @@ export const productApi = createApi({
         method: "POST",
         body: formData,
       }),
+      invalidatesTags: ["product"],
     }),
     getProducts: builder.query({
       query: () => ({
         url: "/get-all",
         method: "GET",
       }),
+      providesTags: ["product"],
     }),
     getProductsById: builder.query({
       query: (query: { _id: string | null }) => ({
@@ -31,12 +34,14 @@ export const productApi = createApi({
         method: "PATCH",
         body: query?.body,
       }),
+      invalidatesTags: ["product"],
     }),
     deleteProduct: builder.mutation({
       query: (query) => ({
         url: `/update/${query._id}`,
         method: "D",
       }),
+      invalidatesTags: ["product"],
     }),
   }),
 });

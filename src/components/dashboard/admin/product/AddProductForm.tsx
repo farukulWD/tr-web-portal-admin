@@ -18,12 +18,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   useCreateProductMutation,
   useGetProductsByIdQuery,
   useUpdatedProductMutation,
 } from "@/redux/api/productApi";
+import { toast } from "sonner";
 
 const productValidationSchema = z.object({
   name: z.string().min(2, {
@@ -48,6 +49,8 @@ export function AddProductForm() {
   const [file, setFile] = useState<File | null>(null);
   const searchParams = useSearchParams();
   const queryId = searchParams.get("id");
+  const router = useRouter();
+  const pathName = usePathname();
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productValidationSchema),
@@ -107,12 +110,23 @@ export function AddProductForm() {
         group: data?.group,
       };
       if (!queryId) {
-        await createProduct(productData);
-      } else {
-        await updatedProduct({ _id: queryId, body: { ...productData } });
-      }
+        const res = await createProduct(productData).unwrap();
+        if (res) {
+          toast.success(res?.message);
 
-      alert("Product submitted successfully!");
+          router.push(pathName.replace("add-product", "all-product"));
+        }
+      } else {
+        const res = await updatedProduct({
+          _id: queryId,
+          body: { ...productData },
+        }).unwrap();
+        if (res) {
+          toast.success(res?.message);
+
+          router.push(pathName.replace("add-product", "all-product"));
+        }
+      }
     } catch (error) {
       console.error("Error submitting product:", error);
       alert("Error submitting product. Please try again.");
