@@ -6,7 +6,8 @@ export type TFormField = {
   placeholder: string;
   description?: string;
   type?: string;
-  validation: z.ZodString;
+  validation: z.ZodType<any>;
+  options?: any[];
 };
 
 import { ReactNode } from "react";

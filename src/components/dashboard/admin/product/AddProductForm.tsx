@@ -233,7 +233,7 @@ export function AddProductForm() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="productCode"
             render={({ field }) => (
@@ -250,7 +250,7 @@ export function AddProductForm() {
                 </FormDescription>
               </FormItem>
             )}
-          />
+          /> */}
         </div>
 
         <div>

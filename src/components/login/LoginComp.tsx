@@ -12,6 +12,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import GlobalForm from "../shared/global/GlobalForm";
+import Link from "next/link";
 // import { useRouter } from "next/navigation";
 
 const LoginComp = () => {
@@ -55,6 +56,12 @@ const LoginComp = () => {
         </CardHeader>
         <CardContent>
           <GlobalForm formFields={formFields} submitLogic={submitLogic} />
+          <p className="mt-5 text-center">
+            You don't have account please{" "}
+            <Link href="/singup" className="underline text-blue-500">
+              Sing up
+            </Link>
+          </p>
         </CardContent>
       </Card>
     </>

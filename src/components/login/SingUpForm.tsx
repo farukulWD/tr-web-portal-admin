@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { TFormField } from "@/types/globalTypes";
 import { Eye, EyeClosed } from "lucide-react";
 
-const GlobalForm = ({
+const SingUpForm = ({
   formFields,
   submitLogic,
 }: {
@@ -73,48 +73,52 @@ const GlobalForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-">
-        {formFields.map((field) => (
-          <FormField
-            key={field.name}
-            control={form.control}
-            name={field.name}
-            render={({ field: inputField }) => (
-              <FormItem
-                className={`${field?.description ? "" : "mb-[0.5rem]"}`}
-              >
-                <FormLabel>{field.label}</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      type={
-                        showPassword[field.name] ? "text" : field.type || "text"
-                      }
-                      placeholder={field.placeholder}
-                      {...inputField}
-                    />
-                    {field.type === "password" && (
-                      <button
-                        type="button"
-                        onClick={() => togglePasswordVisibility(field.name)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 focus:outline-none"
-                      >
-                        {showPassword[field.name] ? (
-                          <Eye className="h-5 w-5 text-gray-500" />
-                        ) : (
-                          <EyeClosed className="h-5 w-5 text-gray-500" />
-                        )}
-                      </button>
-                    )}
-                  </div>
-                </FormControl>
-                {field?.description && (
-                  <FormDescription>{field?.description}</FormDescription>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {formFields.map((field) => (
+            <FormField
+              key={field.name}
+              control={form.control}
+              name={field.name}
+              render={({ field: inputField }) => (
+                <FormItem
+                  className={`${field?.description ? "" : "mb-[0.5rem]"}`}
+                >
+                  <FormLabel>{field.label}</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={
+                          showPassword[field.name]
+                            ? "text"
+                            : field.type || "text"
+                        }
+                        placeholder={field.placeholder}
+                        {...inputField}
+                      />
+                      {field.type === "password" && (
+                        <button
+                          type="button"
+                          onClick={() => togglePasswordVisibility(field.name)}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 focus:outline-none"
+                        >
+                          {showPassword[field.name] ? (
+                            <Eye className="h-5 w-5 text-gray-500" />
+                          ) : (
+                            <EyeClosed className="h-5 w-5 text-gray-500" />
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </FormControl>
+                  {field?.description && (
+                    <FormDescription>{field?.description}</FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
         <div className="flex justify-end">
           <Button type="submit" className="mt-3 ">
             Submit
@@ -125,4 +129,4 @@ const GlobalForm = ({
   );
 };
 
-export default GlobalForm;
+export default SingUpForm;
