@@ -13,20 +13,24 @@ import {
 } from "@/components/ui/card";
 import GlobalForm from "../shared/global/GlobalForm";
 import Link from "next/link";
+import { useLoginUserMutation } from "@/redux/api/authApi";
+import { useRouter } from "next/navigation";
+
+import SetCookies from "./SetCookies";
 // import { useRouter } from "next/navigation";
 
 const LoginComp = () => {
   // const navigate = useRouter();
+  const [loginUser] = useLoginUserMutation();
+  const router = useRouter();
   const formFields: TFormField[] = [
     {
-      name: "email",
-      label: "Email",
-      placeholder: "example@domain.com",
+      name: "mobile",
+      label: "Mobile Number",
+      placeholder: "0189999999",
       // description: "Enter your email address.",
-      type: "email",
-      validation: z
-        .string()
-        .email({ message: "Please enter a valid email address." }),
+      type: "text",
+      validation: z.string({ message: "Please enter a valid email address." }),
     },
     {
       name: "password",
@@ -44,6 +48,17 @@ const LoginComp = () => {
     // if (vales) {
     //   navigate.replace("/");
     // }
+    try {
+      const res = await loginUser(vales).unwrap();
+      console.log(res);
+      if (res?.success) {
+        localStorage.setItem("accessToken", res?.data?.accessToken);
+        SetCookies(res);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -57,7 +72,7 @@ const LoginComp = () => {
         <CardContent>
           <GlobalForm formFields={formFields} submitLogic={submitLogic} />
           <p className="mt-5 text-center">
-            You don't have account please{" "}
+            You do not have account please{" "}
             <Link href="/singup" className="underline text-blue-500">
               Sing up
             </Link>
