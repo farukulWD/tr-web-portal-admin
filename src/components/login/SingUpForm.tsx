@@ -59,7 +59,11 @@ const singUpValidationSchema = z.object({
 
 type singUpFormValues = z.infer<typeof singUpValidationSchema>;
 
-export function SingUpForm() {
+export function SingUpForm({
+  toNavigate,
+}: {
+  toNavigate?: string | undefined;
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createUser] = useCreateUserMutation();
   const router = useRouter();
@@ -100,7 +104,9 @@ export function SingUpForm() {
         toast("User  has been created", {
           description: `${date}`,
         });
-        router.push("/");
+        if (toNavigate) {
+          router.push(toNavigate);
+        }
       }
     } catch (error) {
       // console.error("Error submitting form:", error?.message);
@@ -300,9 +306,11 @@ export function SingUpForm() {
           </FormItem>
         </div>
 
-        <Button type="submit" disabled={isSubmitting} className="w-full">
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

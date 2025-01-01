@@ -40,7 +40,7 @@ const SingUpComp = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SingUpForm />
+          <SingUpForm toNavigate="/" />
           <p className="mt-5 text-center">
             Already have an account please{" "}
             <Link href="/login" className="underline text-blue-500 ml-">

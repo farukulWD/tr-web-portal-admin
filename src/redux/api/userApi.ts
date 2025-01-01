@@ -15,41 +15,14 @@ export const userApi = createApi({
       }),
       //   invalidatesTags: ["product"],
     }),
-    getProducts: builder.query({
+    getUsers: builder.query({
       query: () => ({
-        url: "/get-all",
+        url: "/get-users",
         method: "GET",
       }),
-      //   providesTags: ["product"],
-    }),
-    getProductsById: builder.query({
-      query: (query: { _id: string | null }) => ({
-        url: `/get-single/${query._id}`,
-        method: "GET",
-      }),
-    }),
-    updatedProduct: builder.mutation({
-      query: (query) => ({
-        url: `/update/${query._id}`,
-        method: "PATCH",
-        body: query?.body,
-      }),
-      //   invalidatesTags: ["product"],
-    }),
-    deleteProduct: builder.mutation({
-      query: (query) => ({
-        url: `/delete/${query._id}`,
-        method: "DELETE",
-      }),
-      //   invalidatesTags: ["product"],
+      providesTags: ["user"],
     }),
   }),
 });
 
-export const {
-  useCreateUserMutation,
-  useGetProductsQuery,
-  useGetProductsByIdQuery,
-  useUpdatedProductMutation,
-  useDeleteProductMutation,
-} = userApi;
+export const { useCreateUserMutation, useGetUsersQuery } = userApi;

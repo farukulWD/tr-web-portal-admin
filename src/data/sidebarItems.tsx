@@ -33,6 +33,21 @@ export const sideBarData: navData[] = [
           },
         ],
       },
+      {
+        title: "User Management",
+        url: "#",
+        items: [
+          {
+            title: "All User",
+            url: "/dashboard/admin/administration/user-management/all-user",
+          },
+
+          {
+            title: "Add User",
+            url: "/dashboard/admin/administration/user-management/add-user",
+          },
+        ],
+      },
     ],
   },
 ];
