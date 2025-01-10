@@ -1,7 +1,7 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react";
-import { TFormField } from "@/types/globalTypes";
+
 import { z } from "zod";
 
 import {
@@ -11,53 +11,55 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import GlobalForm from "../shared/global/GlobalForm";
-import Link from "next/link";
-import { useLoginUserMutation } from "@/redux/api/auth/authApi";
-import { useRouter } from "next/navigation";
+import { useLoginMutation } from "@/redux/api/auth/authApi";
+import TrForm from "../Form/TrForm";
+import { Button } from "../ui/button";
+import TrInput from "../Form/inputs/TrInput";
+import TrPasswordInput from "../Form/inputs/TrPasswordInput";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import SetCookies from "./SetCookies";
-// import { useRouter } from "next/navigation";
 
+import { toast } from "sonner";
+
+import { setToken } from "@/redux/features/auth/authSlice";
+import { useRouter } from "next-nprogress-bar";
+import { useSearchParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { TResponse } from "@/types";
+import { globalErrorHandler } from "@/utils";
+import { useAppDispatch } from "@/redux/hook";
+
+const loginSchema = z.object({
+  code: z
+    .string()
+    .min(6, { message: "Code must be at least 6 characters." })
+    .max(6, { message: "Code must be at most 6 characters." }),
+
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters." }),
+});
 const LoginComp = () => {
-  // const navigate = useRouter();
-  const [loginUser] = useLoginUserMutation();
+  const dispatach = useAppDispatch();
   const router = useRouter();
-  const formFields: TFormField[] = [
-    {
-      name: "mobile",
-      label: "Mobile Number",
-      placeholder: "0189999999",
-      // description: "Enter your email address.",
-      type: "text",
-      validation: z.string({ message: "Please enter a valid email address." }),
-    },
-    {
-      name: "password",
-      label: "Password",
-      placeholder: "Enter your password",
-      // description: "Choose a strong password.",
-      type: "password",
-      validation: z
-        .string()
-        .min(6, { message: "Password must be at least 6 characters." }),
-    },
-  ];
+  const search = useSearchParams();
+
+  const redirect = search.get("redirect");
+  const [login, { isLoading }] = useLoginMutation();
+
   const submitLogic = async (vales: any) => {
-    console.log(vales);
-    // if (vales) {
-    //   navigate.replace("/");
-    // }
     try {
-      const res = await loginUser(vales).unwrap();
-      console.log(res);
-      if (res?.success) {
+      const res: TResponse<{
+        accessToken: string;
+      }> = await login(vales).unwrap();
+      if (res.success) {
+        dispatach(setToken(res?.data?.accessToken));
         localStorage.setItem("accessToken", res?.data?.accessToken);
-        SetCookies(res);
-        router.push("/dashboard");
+        toast.success(res.message);
+        router.push(redirect || "/dashboard");
       }
     } catch (error) {
-      console.log(error);
+      globalErrorHandler(error);
     }
   };
   return (
@@ -70,13 +72,23 @@ const LoginComp = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <GlobalForm formFields={formFields} submitLogic={submitLogic} />
-          <p className="mt-5 text-center">
-            You do not have account please{" "}
-            <Link href="/singup" className="underline text-blue-500">
-              Sing up
-            </Link>
-          </p>
+          <TrForm onSubmit={submitLogic} resolver={zodResolver(loginSchema)}>
+            <TrInput
+              name="code"
+              placeholder="Type your Code "
+              label="User Id"
+              type="number"
+            />
+            <TrPasswordInput
+              name="password"
+              placeholder="Type Your password"
+              label="Password"
+            />
+
+            <Button disabled={isLoading} type="submit">
+              {isLoading && <Loader2 className="animate-spin" />} Login
+            </Button>
+          </TrForm>
         </CardContent>
       </Card>
     </>
