@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Controller } from "react-hook-form";
-import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
+import { FormControl, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -71,8 +71,8 @@ export default function TrPasswordInput({
               </div>
             </FormControl>
             {error && (
-              <FormMessage className="text-red-500">{error?.message}</FormMessage>
-            )}
+               <strong className="text-red-400 text-xs">{error?.message}</strong>
+              )}
           </FormItem>
         )}
       />

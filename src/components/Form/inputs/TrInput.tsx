@@ -26,34 +26,36 @@ export default function TrInput({
     <div>
       <Controller
         name={name}
-        render={({ field, fieldState: { error } }) => (
-          <FormItem className={cn(`${className}`)}>
-            <FormControl>
-              <div>
-                <Input
-                  className={cn(`${
-                    error?.message
-                      ? "focus:border-red focus:!shadow-[0px_0px_5px] focus:!shadow-red"
-                      : "focus:border-primary focus:!shadow-[0px_0px_5px] focus:!shadow-primary"
-                  }`)}
-                  type={type}
-                  {...field}
-                  value={field?.value}
-                  placeholder={placeholder}
-                  id={label}
-                  
-                  {...rest}
-                  readOnly={readonly}
-                />
-              </div>
-            </FormControl>
-            {error && (
-              <FormMessage className="text-red-500">
-                {error?.message}
-              </FormMessage>
-            )}
-          </FormItem>
-        )}
+        render={({ field, fieldState: { error } }) => {
+          console.log(error)
+          return (
+            <FormItem className={cn(`${className}`)}>
+              <FormControl>
+                <div>
+                  <Input
+                    className={cn(`${ 
+                      error?.message
+                        ? "focus:border-red focus:!shadow-[0px_0px_5px] focus:!shadow-red"
+                        : "focus:border-primary focus:!shadow-[0px_0px_5px] focus:!shadow-primary"
+                    }`)}
+                    type={type}
+                    {...field}
+                    value={field?.value}
+                    placeholder={placeholder}
+                    id={label}
+                    
+                    {...rest}
+                    readOnly={readonly}
+                  />
+                </div>
+              </FormControl>
+              
+              {error && (
+               <strong className="text-red-400 text-xs">{error?.message}</strong>
+              )}
+            </FormItem>
+          )
+        }}
       />
     </div>
   );
