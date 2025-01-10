@@ -11,7 +11,7 @@ import { IProduct } from "@/types/productType";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
-} from "@/redux/api/productApi";
+} from "@/redux/api/productApi/productApi";
 import GlobalSkeletonTable from "@/components/shared/global/GlobalSkeletonTable";
 import { GlobalAlert } from "@/components/shared/global/GlobalAlert";
 

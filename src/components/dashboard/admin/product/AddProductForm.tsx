@@ -23,7 +23,7 @@ import {
   useCreateProductMutation,
   useGetProductsByIdQuery,
   useUpdatedProductMutation,
-} from "@/redux/api/productApi";
+} from "@/redux/api/productApi/productApi";
 import { toast } from "sonner";
 
 const productValidationSchema = z.object({

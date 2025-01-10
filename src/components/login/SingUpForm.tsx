@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { toast } from "sonner";
-import { useCreateUserMutation } from "@/redux/api/userApi";
+import { useCreateUserMutation } from "@/redux/api/userApi/userApi";
 import { useRouter } from "next/navigation";
 
 const singUpValidationSchema = z.object({

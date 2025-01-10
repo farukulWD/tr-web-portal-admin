@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import GlobalForm from "../shared/global/GlobalForm";
 import Link from "next/link";
-import { useLoginUserMutation } from "@/redux/api/authApi";
+import { useLoginUserMutation } from "@/redux/api/auth/authApi";
 import { useRouter } from "next/navigation";
 
 import SetCookies from "./SetCookies";

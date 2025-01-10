@@ -1,11 +1,8 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const userApi = createApi({
-  reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/v1/users",
-  }),
-  tagTypes: ["user"],
+import { baseApi } from "../baseApi";
+
+export const userApi = baseApi.injectEndpoints({
+ 
   endpoints: (builder) => ({
     createUser: builder.mutation({
       query: (formData) => ({
@@ -13,7 +10,7 @@ export const userApi = createApi({
         method: "POST",
         body: formData,
       }),
-      //   invalidatesTags: ["product"],
+     
     }),
     getUsers: builder.query({
       query: () => ({

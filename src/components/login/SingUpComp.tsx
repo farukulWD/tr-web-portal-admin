@@ -43,7 +43,7 @@ const SingUpComp = () => {
           <SingUpForm toNavigate="/" />
           <p className="mt-5 text-center">
             Already have an account please{" "}
-            <Link href="/login" className="underline text-blue-500 ml-">
+            <Link href="/" className="underline text-blue-500 ml-">
               Login
             </Link>
           </p>

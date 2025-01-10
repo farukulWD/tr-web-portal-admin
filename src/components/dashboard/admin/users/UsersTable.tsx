@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button copy";
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
-import { useGetUsersQuery } from "@/redux/api/userApi";
+import { useGetUsersQuery } from "@/redux/api/userApi/userApi";
 import { TUser } from "@/types/usersType";
 
 const UsersTable = () => {
