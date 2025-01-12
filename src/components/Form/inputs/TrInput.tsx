@@ -27,7 +27,7 @@ export default function TrInput({
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => {
-          console.log(error)
+       
           return (
             <FormItem className={cn(`${className}`)}>
               <FormControl>

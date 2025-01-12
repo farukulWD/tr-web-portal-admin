@@ -1,16 +1,18 @@
-
 import { baseApi } from "../baseApi";
 
 export const userApi = baseApi.injectEndpoints({
- 
   endpoints: (builder) => ({
     createUser: builder.mutation({
-      query: (formData) => ({
-        url: "/register",
-        method: "POST",
-        body: formData,
-      }),
-     
+      query: (formData) => {
+        return {
+          url: "/users/register",
+          method: "POST",
+          data: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+      },
     }),
     getUsers: builder.query({
       query: () => ({
@@ -20,6 +22,7 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["user"],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const { useCreateUserMutation, useGetUsersQuery } = userApi;

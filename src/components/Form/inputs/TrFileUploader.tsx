@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { FormControl, FormItem } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React from "react";
 import { Controller } from "react-hook-form";
 
 type FormFileUploaderProps = {
@@ -29,7 +29,7 @@ export default function TrFileUploader({
       <Controller
         name={name}
         render={({ field, fieldState: { error } }) => {
-          console.log(error);
+        
           return (
             <FormItem className={cn(`${className}`)}>
               <FormControl>

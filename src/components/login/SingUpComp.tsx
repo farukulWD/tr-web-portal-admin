@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { SingUpForm } from "./SingUpForm";
+import { Input } from "../ui/input";
 
 // import { useRouter } from "next/navigation";
 export type TsingUpData = {
@@ -40,13 +41,10 @@ const SingUpComp = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SingUpForm toNavigate="/" />
-          <p className="mt-5 text-center">
-            Already have an account please{" "}
-            <Link href="/" className="underline text-blue-500 ml-">
-              Login
-            </Link>
-          </p>
+          <SingUpForm />
+
+{/* <Input type="file" name="file" onChange={(e)=>console.log(e.target?.files?.[0])}/> */}
+
         </CardContent>
       </Card>
     </>

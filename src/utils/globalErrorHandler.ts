@@ -21,6 +21,6 @@ export const globalErrorHandler = (error: unknown) => {
     if (typeError?.data?.errorSources?.length > 0) {
         toast.error(typeError.data?.errorSources[0]?.message);
     } else {
-        toast.error('An unknown error occurred');
+        toast.error(typeError?.data?.message||"An unknown error occurred");
     }
 };

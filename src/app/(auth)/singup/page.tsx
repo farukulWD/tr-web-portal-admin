@@ -17,8 +17,8 @@ const SingupPage = () => {
 
   return (
     <div className="flex w-full justify-center items-center min-h-screen h-auto">
-      {/* <SingUpComp /> */}
-      <TrForm onSubmit={handles} className="space-y-4">
+      <SingUpComp />
+      {/* <TrForm onSubmit={handles} className="space-y-4">
       <TrFileUploader
         name="uploadedFile"
         label="Upload File"
@@ -31,7 +31,7 @@ const SingupPage = () => {
       >
         Submit
       </button>
-    </TrForm>
+    </TrForm> */}
     </div>
   );
 };
