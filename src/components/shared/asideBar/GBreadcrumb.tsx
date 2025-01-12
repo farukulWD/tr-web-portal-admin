@@ -19,7 +19,7 @@ const GBreadcrumb = () => {
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink href="#">
-            834384 - M/S Masnun Plastic Gallery. [TEL Furniture]
+          Admin
           </BreadcrumbLink>
         </BreadcrumbItem>
 

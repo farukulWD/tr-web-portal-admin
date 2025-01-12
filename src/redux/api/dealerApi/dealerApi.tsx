@@ -1,11 +1,11 @@
 import { baseApi } from "../baseApi";
 
-export const userApi = baseApi.injectEndpoints({
+export const dealerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createUser: builder.mutation({
+    createDeler: builder.mutation({
       query: (formData) => {
         return {
-          url: "/users/register",
+          url: "/dealer/create-dealer",
           method: "POST",
           data: formData,
           headers: {
@@ -14,15 +14,15 @@ export const userApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getUsers: builder.query({
+    getDealers: builder.query({
       query: () => ({
         url: "/users/get-users",
         method: "GET",
       }),
-      providesTags: ["user"],
+      providesTags: ["dealer"],
     }),
   }),
   overrideExisting: true,
 });
 
-export const { useCreateUserMutation, useGetUsersQuery } = userApi;
+export const {  useCreateDelerMutation,useGetDealersQuery} = dealerApi;

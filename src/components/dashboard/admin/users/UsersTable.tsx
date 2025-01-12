@@ -18,17 +18,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button copy";
+
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { useGetUsersQuery } from "@/redux/api/userApi/userApi";
 import { TUser } from "@/types/usersType";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UpdateIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 
 const UsersTable = () => {
-  const { data, isError, isLoading } = useGetUsersQuery({});
+  const { data, isError, isLoading } = useGetUsersQuery(undefined);
 
   if (isError) return <p>Error loading products</p>;
 
-  const users: TUser[] = data?.data ? data?.data : [];
+  const users: TUser[] = data?.data || [];
 
   const columns: ColumnConfig<TUser>[] = [
     {
@@ -84,6 +92,25 @@ const UsersTable = () => {
             >
               <Settings2 className="size-5 text-green-500 cursor-pointer" />
             </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <UpdateIcon />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
+                  <Link
+                    href={
+                      `/dashboard/admin/administration/user-management/make-dealer/${item?._id}`
+                    }
+                  >
+                    Daler
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Sr</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <div className="flex justify-center items-center w-full">
               <GlobalAlert
                 actionButton={
@@ -130,9 +157,8 @@ const UsersTable = () => {
   return (
     <>
       <div className="mb-5">
-        <Label htmlFor="search">Search</Label>
         <Input
-          placeholder="Search your Product"
+          placeholder="Search"
           name="search"
           id="search"
           //   onChange={(e) => setText(e.target.value)}

@@ -74,7 +74,7 @@ export function SingUpForm({
     const data = new FormData();
     data.append("file", formData?.profileImage);
     data.append("data", JSON.stringify(userData));
-    console.log(Object.fromEntries(data));
+   
 
     try {
       const res: TResponse<any> = await createUser(data).unwrap();

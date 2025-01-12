@@ -46,6 +46,7 @@ export const sideBarData: navData[] = [
             title: "Add User",
             url: "/dashboard/admin/administration/user-management/add-user",
           },
+         
         ],
       },
     ],
