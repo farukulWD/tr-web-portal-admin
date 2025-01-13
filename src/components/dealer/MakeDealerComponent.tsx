@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import TrForm from "../Form/TrForm";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,16 +9,37 @@ import { FormControl, FormItem } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useCreateDelerMutation } from "@/redux/api/dealerApi/dealerApi";
-
+import { Loader2 } from "lucide-react";
+import { globalErrorHandler } from "@/utils";
+import { toast } from "sonner";
+import { TResponse } from "@/types";
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const makeDealerSchema = z.object({
   shopName: z.string({ message: "Shop Name is Required" }),
   nidNo: z.string({ message: "NID number is required" }),
-  nidPic: z.any({ message: "NID Pic is required" }),
+  // nidPic: z.any({ message: "NID Pic is required" }),
+  nidPic:z
+  .any()
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Nid is Required (.jpg, .jpeg, .png and .webp formats are supported)."
+  )
+,
   refName: z.string({ message: "Reference name is required" }),
   refNidNo: z.string({ message: "Reference ID is required" }),
-  refNid: z.any({ message: "Reference NID number is required" }),
+  refNid:z
+  .any()
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Reference NID number is required (.jpg, .jpeg, .png and .webp formats are supported)."
+  ),
   refMobile: z.string({ message: "Mobile number is required" }).min(10).max(14),
-  refPhoto: z.any({ message: "Reference photo URL is required" }),
+  refPhoto:z
+  .any()
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Reference photo URL is required (.jpg, .jpeg, .png and .webp formats are supported)."
+  ),
   group: z.string({ message: "Group is required" }),
   mobile: z.string({ message: "Mobile number is required" }).min(10).max(14),
 });
@@ -34,37 +55,47 @@ export type MakeDealerFormData = {
   refPhoto: File;
   group: string;
   mobile: string;
-  userId:string|null
+  userId: string | null;
 };
 
 function MakeDealerComponent({ id }: { id: string }) {
-    const [createDeler]=useCreateDelerMutation()
+  const [createDeler, { isLoading }] = useCreateDelerMutation();
+  const [photos, setPhotos] = useState({
+    nidPic: "",
+    refNid: "",
+    refPhoto: "",
+  });
   const handleMakeDealer = async (data: MakeDealerFormData): Promise<void> => {
     // Handle form submission logic here
-   const {nidPic,refNid,refPhoto,...rest}=data
+    const { nidPic, refNid, refPhoto, ...rest } = data;
 
-   rest.userId = id 
+    rest.userId = id;
 
-    
+    const formData = new FormData();
 
-
-    const formData = new FormData()
-
-    formData.append("nidPic",nidPic)
-    formData.append("refNid",refNid)
-    formData.append("refPhoto",refPhoto)
+    formData.append("nidPic", nidPic);
+    formData.append("refNid", refNid);
+    formData.append("refPhoto", refPhoto);
 
     formData.append("data", JSON.stringify(rest));
 
-    console.log(Object.fromEntries(formData))
-    const res = await createDeler(formData).unwrap()
+ 
+    try {
+      const res: TResponse<any> = await createDeler(formData).unwrap();
+      if (res) {
+        toast.success(res?.message);
+      }
+    } catch (error) {
+      globalErrorHandler(error);
+    }
   };
 
   return (
-    <div>
+    <div className="flex justify-center items-center ">
       <TrForm
         onSubmit={handleMakeDealer}
         resolver={zodResolver(makeDealerSchema)}
+        className="w-full my-auto"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <TrInput label="Shop Name" name="shopName" placeholder="Shop Name" />
@@ -80,26 +111,31 @@ function MakeDealerComponent({ id }: { id: string }) {
             render={({
               field: { onChange, value, ...field },
               fieldState: { error },
-            }) => (
-              <FormItem>
-                <FormControl>
-                  <div>
-                    <Input
-                      type="file"
-                      value={value?.fileName || ""}
-                      onChange={(e) => onChange(e.target.files?.[0])}
-                      {...field}
-                      accept="image/png, image/gif, image/jpeg"
-                    />
-                  </div>
-                </FormControl>
-                {error && (
-                  <strong className="text-red-400 text-xs">
-                    {error?.message}
-                  </strong>
-                )}
-              </FormItem>
-            )}
+            }) => {
+              console.log(error)
+              return (
+                <FormItem>
+                  <FormControl>
+                    <div>
+                      <label htmlFor="nidPic">Nid</label>
+                      <Input
+                        type="file"
+                        id="nidPic"
+                        value={value?.fileName}
+                        onChange={(e) => onChange(e.target.files?.[0])}
+                        {...field}
+                        accept="image/png, image/gif, image/jpeg"
+                      />
+                    </div>
+                  </FormControl>
+                  {error && (
+                    <strong className="text-red-400 text-xs">
+                      {error?.message}
+                    </strong>
+                  )}
+                </FormItem>
+              );
+            }}
           />
           <TrInput
             label="Reference Name"
@@ -119,14 +155,15 @@ function MakeDealerComponent({ id }: { id: string }) {
               field: { onChange, value, ...field },
               fieldState: { error },
             }) => {
-                
               return (
                 <FormItem>
                   <FormControl>
                     <div>
+                      <label htmlFor="refNid">Ref Nid</label>
                       <Input
                         type="file"
-                        value={value?.fileName || ""}
+                        id="refNid"
+                        value={value?.fileName}
                         onChange={(e) => onChange(e.target.files?.[0])}
                         {...field}
                         accept="image/png, image/gif, image/jpeg"
@@ -158,8 +195,11 @@ function MakeDealerComponent({ id }: { id: string }) {
               <FormItem>
                 <FormControl>
                   <div>
+                    <label htmlFor="refPhoto">Select Ref Photo</label>
                     <Input
                       type="file"
+                      id="refPhoto"
+                      placeholder="Add Nomoni Photo"
                       value={value?.fileName}
                       onChange={(e) => onChange(e.target.files?.[0])}
                       {...field}
@@ -184,7 +224,10 @@ function MakeDealerComponent({ id }: { id: string }) {
           />
         </div>
 
-        <Button type="submit">Submit</Button>
+        <Button disabled={isLoading} type="submit">
+          {" "}
+          {isLoading && <Loader2 className="animate-spin" />} Submit
+        </Button>
       </TrForm>
     </div>
   );

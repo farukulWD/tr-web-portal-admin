@@ -32,6 +32,7 @@ export default function TrInput({
             <FormItem className={cn(`${className}`)}>
               <FormControl>
                 <div>
+                <label htmlFor={label}>{label}</label>
                   <Input
                     className={cn(`${ 
                       error?.message

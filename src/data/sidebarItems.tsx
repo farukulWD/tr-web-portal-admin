@@ -46,7 +46,16 @@ export const sideBarData: navData[] = [
             title: "Add User",
             url: "/dashboard/admin/administration/user-management/add-user",
           },
-         
+        ],
+      },
+      {
+        title: "Dealer Management",
+        url: "#",
+        items: [
+          {
+            title: "All Dealer",
+            url: "/dashboard/admin/administration/dealer-management/all-dealers",
+          },
         ],
       },
     ],

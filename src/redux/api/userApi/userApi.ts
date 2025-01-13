@@ -1,4 +1,6 @@
+import { TResponse } from "@/types";
 import { baseApi } from "../baseApi";
+import { TUser } from "@/types/usersType";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,7 +16,7 @@ export const userApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getUsers: builder.query({
+    getUsers: builder.query<TResponse<TUser[]>,undefined>({
       query: () => ({
         url: "/users/get-users",
         method: "GET",

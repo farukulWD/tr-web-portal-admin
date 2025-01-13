@@ -30,13 +30,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UpdateIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const UsersTable = () => {
   const { data, isError, isLoading } = useGetUsersQuery(undefined);
 
   if (isError) return <p>Error loading products</p>;
 
-  const users: TUser[] = data?.data || [];
+  const users = data?.data || [];
 
   const columns: ColumnConfig<TUser>[] = [
     {
@@ -104,10 +105,10 @@ const UsersTable = () => {
                       `/dashboard/admin/administration/user-management/make-dealer/${item?._id}`
                     }
                   >
-                    Daler
+                    Daaler
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Sr</DropdownMenuItem>
+                <DropdownMenuItem onClick={()=>toast.info("Coming soon")}>Sr</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 

@@ -1,3 +1,4 @@
+import { TDealer, TResponse } from "@/types";
 import { baseApi } from "../baseApi";
 
 export const dealerApi = baseApi.injectEndpoints({
@@ -14,9 +15,9 @@ export const dealerApi = baseApi.injectEndpoints({
         };
       },
     }),
-    getDealers: builder.query({
+    getDealers: builder.query<TResponse<TDealer[]>, void>({
       query: () => ({
-        url: "/users/get-users",
+        url: "/dealer/get-dealers",
         method: "GET",
       }),
       providesTags: ["dealer"],
