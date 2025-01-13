@@ -4,10 +4,7 @@ import GlobalTable from "@/components/shared/global/GlobalTable";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
-
 import { Eye, Settings2, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { IProduct } from "@/types/productType";
 import {
   useDeleteProductMutation,
   useGetProductsQuery,
@@ -26,15 +23,18 @@ import {
 
 import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { TProduct } from "@/types";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 const ProductTable = () => {
   const [text, setText] = useState("");
-  const { data, isLoading, isError } = useGetProductsQuery({});
+  const { data, isLoading, isError } = useGetProductsQuery(undefined);
   const [deleteProduct] = useDeleteProductMutation();
   // if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading products</p>;
 
-  const products: IProduct[] = data?.data; // Extracting the products array from `data`
+  const products = data?.data || [];
 
   const filteredData = products?.filter(
     (item) =>
@@ -42,7 +42,7 @@ const ProductTable = () => {
       item.productCode.toLowerCase().includes(text.toLowerCase())
   );
 
-  const columns: ColumnConfig<IProduct>[] = [
+  const columns: ColumnConfig<TProduct>[] = [
     {
       key: "productCode",
       label: "Code",
@@ -65,6 +65,24 @@ const ProductTable = () => {
       align: "center",
     },
     {
+      key: "isDeleted",
+      label: "Product Status",
+      align: "center",
+      render: (_, item) => {
+        return (
+          <>
+            {item?.isDeleted ? (
+              <Badge variant={"destructive"}>Inactive</Badge>
+            ) : (
+              <Badge variant={"outline"} className="">
+                Active
+              </Badge>
+            )}
+          </>
+        );
+      },
+    },
+    {
       key: "actions",
       label: "Actions",
       align: "center",
@@ -80,23 +98,40 @@ const ProductTable = () => {
             <div className="flex justify-center items-center w-full">
               <GlobalAlert
                 actionButton={
-                  <Trash2 className="size-5 text-destructive cursor-pointer" />
+                  item?.isDeleted ? (
+                    <p className="size-5 text-primary cursor-pointer">
+                      {" "}
+                      Active
+                    </p>
+                  ) : (
+                    <p className="size-5 text-destructive cursor-pointer">
+                      {" "}
+                      Inactive
+                    </p>
+                  )
                 }
                 title={
                   <div className="text-center">
                     Are you sure you want to{" "}
-                    <span className="text-destructive">Deleted</span> this item
+                    <span className="text-destructive">
+                      {item?.isDeleted ? "Active" : "Inactive"}
+                    </span>{" "}
+                    this item
                   </div>
                 }
-                subTitle={
-                  <>
-                    If you deleted this item once tis item is not retrieve again
-                  </>
-                }
+                subTitle={" "}
                 continueAction={
-                  <span onClick={() => deleteProduct({ _id: item?._id })}>
-                    Deleted
-                  </span>
+                  <>
+                    {item?.isDeleted ? (
+                      <span onClick={() => deleteProduct({ _id: item?._id })}>
+                        Active
+                      </span>
+                    ) : (
+                      <span onClick={() => deleteProduct({ _id: item?._id })}>
+                        Inactive
+                      </span>
+                    )}
+                  </>
                 }
                 continueActionClass="bg-destructive hover:bg-destructive/90"
               />

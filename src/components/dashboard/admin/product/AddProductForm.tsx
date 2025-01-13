@@ -118,8 +118,8 @@ export function AddProductForm() {
         }
       } else {
         const res = await updatedProduct({
-          _id: queryId,
-          body: { ...productData },
+          productId: queryId,
+          productData: { ...productData },
         }).unwrap();
         if (res) {
           toast.success(res?.message);
