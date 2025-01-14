@@ -58,6 +58,16 @@ export const sideBarData: navData[] = [
           },
         ],
       },
+      {
+        title: "Transaction Management",
+        url: "#",
+        items: [
+          {
+            title: "All Transaction",
+            url: "/dashboard/admin/administration/transaction-management/all-transaction",
+          },
+        ],
+      },
     ],
   },
 ];

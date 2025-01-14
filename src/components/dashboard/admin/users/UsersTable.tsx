@@ -105,7 +105,7 @@ const UsersTable = () => {
                       `/dashboard/admin/administration/user-management/make-dealer/${item?._id}`
                     }
                   >
-                    Daaler
+                    Dealer
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={()=>toast.info("Coming soon")}>Sr</DropdownMenuItem>
@@ -120,7 +120,7 @@ const UsersTable = () => {
                 title={
                   <div className="text-center">
                     Are you sure you want to{" "}
-                    <span className="text-destructive">Deleted</span> this item
+                    <span className="text-destructive">Deleted</span> this User
                   </div>
                 }
                 subTitle={
@@ -130,15 +130,15 @@ const UsersTable = () => {
                 }
                 continueAction={
                   <>
-                    {/* <span onClick={() => deleteProduct({ _id: item?._id })}>
+                    <span onClick={() => toast.info("Coming soon")}>
                     Deleted
-                  </span> */}
+                  </span>
                   </>
                 }
                 continueActionClass="bg-destructive hover:bg-destructive/90"
               />
             </div>
-            <div className="flex justify-center items-center w-full">
+            {/* <div className="flex justify-center items-center w-full">
               <Dialog>
                 <DialogTrigger
                   asChild
@@ -148,7 +148,7 @@ const UsersTable = () => {
                 </DialogTrigger>
                 {UsersModal()}
               </Dialog>
-            </div>
+            </div> */}
           </div>
         );
       },
