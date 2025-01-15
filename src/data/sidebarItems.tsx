@@ -6,7 +6,7 @@ export const sideBarData: navData[] = [
     url: "#",
     items: [
       {
-        title: "Order Management",
+        title: "Orders",
         url: "#",
         items: [
           {
@@ -20,7 +20,7 @@ export const sideBarData: navData[] = [
         ],
       },
       {
-        title: "Product Management",
+        title: "Products",
         url: "#",
         items: [
           {
@@ -34,7 +34,7 @@ export const sideBarData: navData[] = [
         ],
       },
       {
-        title: "User Management",
+        title: "Users",
         url: "#",
         items: [
           {
@@ -49,7 +49,7 @@ export const sideBarData: navData[] = [
         ],
       },
       {
-        title: "Dealer Management",
+        title: "Dealers",
         url: "#",
         items: [
           {
@@ -59,7 +59,7 @@ export const sideBarData: navData[] = [
         ],
       },
       {
-        title: "Transaction Management",
+        title: "Transactions",
         url: "#",
         items: [
           {

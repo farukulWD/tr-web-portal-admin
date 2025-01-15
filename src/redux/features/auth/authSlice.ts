@@ -29,11 +29,13 @@ export type TUser = {
 type TAuthState = {
     user: TUser | null;
     accessToken: null | string;
+    userId:string;
    
 };
 const initialState: TAuthState = {
     user: null,
     accessToken: null,
+    userId:""
   
 };
 
@@ -47,10 +49,13 @@ export const authSlice = createSlice({
         setToken: (state, action) => {
             state.accessToken = action.payload;
         },
+        setUserId:(state,action)=>{
+            state.userId=action.payload
+        }
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setToken } = authSlice.actions;
+export const { setUser, setToken ,setUserId} = authSlice.actions;
 
 export default authSlice.reducer;

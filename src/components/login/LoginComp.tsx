@@ -18,16 +18,15 @@ import TrInput from "../Form/inputs/TrInput";
 import TrPasswordInput from "../Form/inputs/TrPasswordInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-
 import { toast } from "sonner";
 
-import { setToken } from "@/redux/features/auth/authSlice";
+import { setToken, setUserId } from "@/redux/features/auth/authSlice";
 import { useRouter } from "next-nprogress-bar";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { TResponse } from "@/types";
 import { globalErrorHandler } from "@/utils";
 import { useAppDispatch } from "@/redux/hook";
+import { jwtDecode } from "jwt-decode";
 
 const loginSchema = z.object({
   code: z
@@ -49,12 +48,15 @@ const LoginComp = () => {
 
   const submitLogic = async (vales: any) => {
     try {
-      const res: TResponse<{
-        accessToken: string;
-      }> = await login(vales).unwrap();
+      const res = await login(vales).unwrap();
       if (res.success) {
         dispatach(setToken(res?.data?.accessToken));
         localStorage.setItem("accessToken", res?.data?.accessToken);
+        const decoded: any = await jwtDecode(res?.data?.accessToken);
+        console.log(decoded);
+        if (decoded) {
+          dispatach(setUserId(decoded?.userId));
+        }
         toast.success(res.message);
         router.push(redirect || "/dashboard");
       }
@@ -62,17 +64,21 @@ const LoginComp = () => {
       globalErrorHandler(error);
     }
   };
+const defaultValue={
+  code:"250001",
+  password:"01774605255"
+}
   return (
     <>
       <Card className="mx-auto max-w-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
           <CardDescription>
-            Enter your email and password to login to your account
+            Enter your Code and password to login as Admin
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <TrForm onSubmit={submitLogic} resolver={zodResolver(loginSchema)}>
+          <TrForm onSubmit={submitLogic} defaultValues={defaultValue} resolver={zodResolver(loginSchema)}>
             <TrInput
               name="code"
               placeholder="Type your Code "

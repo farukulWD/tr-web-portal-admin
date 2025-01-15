@@ -59,7 +59,7 @@ instance.interceptors.request.use(
 
 
         if (accessToken) {
-            config.headers['Authorization'] = `Bearer ${accessToken}`;
+            config.headers['Authorization'] = accessToken;
         }
 
         return config;
