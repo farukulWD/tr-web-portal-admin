@@ -53,11 +53,17 @@ const LoginComp = () => {
         dispatach(setToken(res?.data?.accessToken));
         localStorage.setItem("accessToken", res?.data?.accessToken);
         const decoded: any = await jwtDecode(res?.data?.accessToken);
-        if (decoded) {
-          dispatach(setUserId(decoded?.userId));
+        if (decoded?.role !== "superAdmin") {
+          toast.warning("You Are not Allowed Here");
+          router.push("/");
+        } else {
+          if (decoded) {
+            dispatach(setUserId(decoded?.userId));
+          }
+          toast.success(res.message);
+
+          router.push(redirect || "/dashboard");
         }
-        toast.success(res.message);
-        router.push(redirect || "/dashboard");
       }
     } catch (error) {
       globalErrorHandler(error);
