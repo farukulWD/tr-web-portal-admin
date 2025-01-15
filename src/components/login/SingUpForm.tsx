@@ -57,30 +57,20 @@ const singUpValidationSchema = z.object({
 
 type singUpFormValues = z.infer<typeof singUpValidationSchema>;
 
-export function SingUpForm({
-  toNavigate,
-}: {
-  toNavigate?: string | undefined;
-}) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function SingUpForm() {
   const [createUser, { isLoading }] = useCreateUserMutation();
-  const router = useRouter();
 
   async function handleRegister(formData: singUpFormValues) {
-    console.log(formData.profileImage);
-    console.log(formData);
     const userData = { userData: formData };
 
     const data = new FormData();
     data.append("file", formData?.profileImage);
     data.append("data", JSON.stringify(userData));
-   
 
     try {
       const res: TResponse<any> = await createUser(data).unwrap();
       if (res) {
         toast.success(res.message);
-        console.log(res);
       }
     } catch (error) {
       globalErrorHandler(error);
@@ -165,7 +155,7 @@ export function SingUpForm({
                     }}
                     {...field}
                     onBlur={field.onBlur}
-                   accept="image/png, image/gif, image/jpeg"
+                    accept="image/png, image/gif, image/jpeg"
                   />
                 </div>
               </FormControl>

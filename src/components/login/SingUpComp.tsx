@@ -42,9 +42,6 @@ const SingUpComp = () => {
         </CardHeader>
         <CardContent>
           <SingUpForm />
-
-{/* <Input type="file" name="file" onChange={(e)=>console.log(e.target?.files?.[0])}/> */}
-
         </CardContent>
       </Card>
     </>

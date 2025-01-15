@@ -13,33 +13,37 @@ import { Loader2 } from "lucide-react";
 import { globalErrorHandler } from "@/utils";
 import { toast } from "sonner";
 import { TResponse } from "@/types";
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ACCEPTED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 const makeDealerSchema = z.object({
   shopName: z.string({ message: "Shop Name is Required" }),
   nidNo: z.string({ message: "NID number is required" }),
   // nidPic: z.any({ message: "NID Pic is required" }),
-  nidPic:z
-  .any()
-  .refine(
-    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-    "Nid is Required (.jpg, .jpeg, .png and .webp formats are supported)."
-  )
-,
+  nidPic: z
+    .any()
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Nid is Required (.jpg, .jpeg, .png and .webp formats are supported)."
+    ),
   refName: z.string({ message: "Reference name is required" }),
   refNidNo: z.string({ message: "Reference ID is required" }),
-  refNid:z
-  .any()
-  .refine(
-    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-    "Reference NID number is required (.jpg, .jpeg, .png and .webp formats are supported)."
-  ),
+  refNid: z
+    .any()
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Reference NID number is required (.jpg, .jpeg, .png and .webp formats are supported)."
+    ),
   refMobile: z.string({ message: "Mobile number is required" }).min(10).max(14),
-  refPhoto:z
-  .any()
-  .refine(
-    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-    "Reference photo URL is required (.jpg, .jpeg, .png and .webp formats are supported)."
-  ),
+  refPhoto: z
+    .any()
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Reference photo URL is required (.jpg, .jpeg, .png and .webp formats are supported)."
+    ),
   group: z.string({ message: "Group is required" }),
   mobile: z.string({ message: "Mobile number is required" }).min(10).max(14),
 });
@@ -79,7 +83,6 @@ function MakeDealerComponent({ id }: { id: string }) {
 
     formData.append("data", JSON.stringify(rest));
 
- 
     try {
       const res: TResponse<any> = await createDeler(formData).unwrap();
       if (res) {
@@ -112,7 +115,6 @@ function MakeDealerComponent({ id }: { id: string }) {
               field: { onChange, value, ...field },
               fieldState: { error },
             }) => {
-              console.log(error)
               return (
                 <FormItem>
                   <FormControl>

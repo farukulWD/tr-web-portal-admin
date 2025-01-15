@@ -53,7 +53,6 @@ const LoginComp = () => {
         dispatach(setToken(res?.data?.accessToken));
         localStorage.setItem("accessToken", res?.data?.accessToken);
         const decoded: any = await jwtDecode(res?.data?.accessToken);
-        console.log(decoded);
         if (decoded) {
           dispatach(setUserId(decoded?.userId));
         }
@@ -64,10 +63,10 @@ const LoginComp = () => {
       globalErrorHandler(error);
     }
   };
-const defaultValue={
-  code:"250001",
-  password:"01774605255"
-}
+  const defaultValue = {
+    code: "250001",
+    password: "01774605255",
+  };
   return (
     <>
       <Card className="mx-auto max-w-sm">
@@ -78,7 +77,11 @@ const defaultValue={
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <TrForm onSubmit={submitLogic} defaultValues={defaultValue} resolver={zodResolver(loginSchema)}>
+          <TrForm
+            onSubmit={submitLogic}
+            defaultValues={defaultValue}
+            resolver={zodResolver(loginSchema)}
+          >
             <TrInput
               name="code"
               placeholder="Type your Code "
