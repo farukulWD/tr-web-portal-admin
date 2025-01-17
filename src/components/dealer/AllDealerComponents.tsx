@@ -11,19 +11,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { PlusCircledIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { UpdateIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import { AlertDialogHeader } from "../ui/alert-dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import TrForm from "../Form/TrForm";
 import TrInput from "../Form/inputs/TrInput";
 import { z } from "zod";
@@ -147,6 +143,7 @@ export const UsersModal = (record: TDealer) => {
           defaultValues={defaultData}
         >
           <TrInput
+            className=""
             readonly
             name="dealer"
             label="Dealer"

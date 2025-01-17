@@ -7,7 +7,7 @@ export const productApi = baseApi.injectEndpoints({
       query: (formData) => ({
         url: "/product/create",
         method: "POST",
-        body: formData,
+        data: formData,
       }),
       invalidatesTags: ["product"],
     }),

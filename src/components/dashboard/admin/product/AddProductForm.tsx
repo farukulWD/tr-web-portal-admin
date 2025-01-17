@@ -25,6 +25,7 @@ import {
   useUpdatedProductMutation,
 } from "@/redux/api/productApi/productApi";
 import { toast } from "sonner";
+import { globalErrorHandler } from "@/utils";
 
 const productValidationSchema = z.object({
   name: z.string().min(2, {
@@ -55,13 +56,12 @@ export function AddProductForm() {
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productValidationSchema),
     defaultValues: {
-      name: "",
-      price: 0,
-      description: "",
-      stock: 0,
-      // group: "",
-      // productCode: "",
-      // image: "",
+      name: "Door 1",
+      price: 2,
+      description: "This is awesome door",
+      stock: 3,
+      group: "door",
+      image: "https://i.ibb.co.com/k5FYb2G/image.png",
     },
   });
 
@@ -91,17 +91,6 @@ export function AddProductForm() {
   async function onSubmit(data: ProductFormValues) {
     setIsSubmitting(true);
     try {
-      // const formData = new FormData();
-      // formData.append("name", data.name);
-      // formData.append("price", data.price.toString());
-      // formData.append("description", data.description || "");
-      // formData.append("stock", data.stock.toString());
-      // // Uncomment the following lines to include additional fields
-      // // formData.append("group", data.group || "");
-      // // formData.append("productCode", data.productCode || "");
-      // if (file) {
-      //   formData.append("image", file);
-      // }
       const productData: ProductFormValues = {
         name: data.name,
         price: data?.price,
@@ -128,8 +117,8 @@ export function AddProductForm() {
         }
       }
     } catch (error) {
+      globalErrorHandler(error);
       console.error("Error submitting product:", error);
-      alert("Error submitting product. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
