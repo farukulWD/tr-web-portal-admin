@@ -6,7 +6,7 @@ import React from "react";
 
 export default function TransactionPage() {
   const { data, isLoading } = useGetTransactionsQuery(undefined);
-  console.log(data?.data);
+ 
   return (
     <div>
       <div className="mb-5 ">
