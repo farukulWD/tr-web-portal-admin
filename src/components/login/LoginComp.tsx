@@ -70,8 +70,8 @@ const LoginComp = () => {
     }
   };
   const defaultValue = {
-    code: "250001",
-    password: "01774605255",
+    code: "250002",
+    password: "01774605259",
   };
   return (
     <>
