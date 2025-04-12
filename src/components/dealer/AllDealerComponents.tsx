@@ -38,11 +38,11 @@ function AllDealerComponents() {
       label: "Name",
       align: "center",
     },
-    {
-      key: "code",
-      label: "Code",
-      align: "center",
-    },
+    // {
+    //   key: "code",
+    //   label: "Code",
+    //   align: "center",
+    // },
     {
       key: "code",
       label: "Code",
