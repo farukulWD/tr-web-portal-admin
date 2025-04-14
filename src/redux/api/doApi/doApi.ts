@@ -21,7 +21,21 @@ const doApi = baseApi.injectEndpoints({
         url: `/do/approved-do/${id}`,
         method: "POST",
       }),
-      invalidatesTags: ["do"],
+      invalidatesTags: ["do", "undelivered"],
+    }),
+    getAllUndelivered: builder.query({
+      query: () => ({
+        url: `/do/get-all-undelivered-products`,
+        method: "GET",
+      }),
+      providesTags: ["undelivered"],
+    }),
+    singleUndelivered: builder.query({
+      query: (id) => ({
+        url: `/do/get-single-undelivered-products/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["single-undelivered"],
     }),
   }),
 });
@@ -30,4 +44,7 @@ export const {
   useGetAllDoQuery,
   useGetSingleDoQuery,
   useApprovedOrderMutation,
+  useGetAllUndeliveredQuery,
+  useSingleUndeliveredQuery,
+
 } = doApi;

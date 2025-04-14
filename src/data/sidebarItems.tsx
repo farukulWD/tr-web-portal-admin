@@ -20,6 +20,16 @@ export const sideBarData: navData[] = [
         ],
       },
       {
+        title: "Undelivered",
+        url: "#",
+        items: [
+          {
+            title: "All Undelivered",
+            url: "/dashboard/admin/administration/undelivered-management/all-undelivered",
+          }
+        ],
+      },
+      {
         title: "Products",
         url: "#",
         items: [

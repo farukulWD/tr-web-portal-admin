@@ -26,6 +26,8 @@ import {
 import { globalErrorHandler } from "@/utils";
 import dayjs from "dayjs";
 import {
+  ArrowBigLeft,
+  BackpackIcon,
   CheckCircle,
   Clock,
   Download,
@@ -34,6 +36,7 @@ import {
   Store,
   User,
 } from "lucide-react";
+import { useRouter } from "next-nprogress-bar";
 import { useRef } from "react";
 import { toast } from "sonner";
 
@@ -42,6 +45,7 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
   const [approvedOrder, { isLoading: approveLoading }] =
     useApprovedOrderMutation();
   const printRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const orderData = data?.data;
   // Format date
   const formatDate = (dateString: any) => {
@@ -116,15 +120,20 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
     }
   };
 
+ 
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div ref={printRef} className="grid gap-6">
         {/* Order Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold">
-              Order #{orderData?.orderCode}
-            </h1>
+            <div className="flex items-center gap-2 mb-2">
+              <ArrowBigLeft className="cursor-pointer" onClick={()=>router.back()} />
+              <h1 className="text-3xl font-bold">
+                Order #{orderData?.orderCode}
+              </h1>
+            </div>
             <p className="text-muted-foreground">
               {formatDate(orderData?.createdAt)}
             </p>
@@ -236,21 +245,26 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
                 </span>
               </div>
               <div className="flex gap-4">
-                <Button variant="outline" className="w-32">
-                  Reject
-                </Button>
-                <Button
-                  disabled={approveLoading}
-                  onClick={handleApprove}
-                  className="w-32"
-                >
-                  Approve
-                  {approveLoading && (
-                    <span className="ml-2 animate-spin">
-                      <Download className="h-4 w-4" />
-                    </span>
-                  )}
-                </Button>
+                {!orderData?.approved && (
+                  <Button variant="outline" className="w-32">
+                    Reject
+                  </Button>
+                )}
+
+                {!orderData?.approved && (
+                  <Button
+                    disabled={approveLoading}
+                    onClick={handleApprove}
+                    className="w-32"
+                  >
+                    Approve
+                    {approveLoading && (
+                      <span className="ml-2 animate-spin">
+                        <Download className="h-4 w-4" />
+                      </span>
+                    )}
+                  </Button>
+                )}
               </div>
             </CardFooter>
           </Card>
