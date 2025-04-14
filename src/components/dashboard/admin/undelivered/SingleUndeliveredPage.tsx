@@ -1,19 +1,3 @@
-// "use client"
-
-// import { useSingleUndeliveredQuery } from "@/redux/api/doApi/doApi";
-
-// function SingleUndeliveredPage({undeliveredId}: {undeliveredId: string}) {
-//     console.log(undeliveredId)
-//   const { data, isLoading } = useSingleUndeliveredQuery(undeliveredId,{skip: !undeliveredId});
-//   console.log("SingleUndeliveredPage", data);
-//   return (
-//     <div>
-//         <p>{JSON.stringify(data?.data)}</p>
-//     </div>
-//   )
-// }
-
-// export default SingleUndeliveredPage
 
 "use client";
 
@@ -43,9 +27,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useSingleUndeliveredQuery } from "@/redux/api/doApi/doApi";
 import GlobalSkeletonTable from "@/components/shared/global/GlobalSkeletonTable";
-// import { formatCurrency } from "@/lib/utils"
-
-// Mock data based on the provided JSON
+import { toast } from "sonner";
 
 export default function SingleUndeliveredPage({
   undeliveredId,
@@ -67,6 +49,7 @@ export default function SingleUndeliveredPage({
 
   const dealerData = data?.data;
 
+  console.log(JSON.stringify(dealerData))
   // Initialize delivery quantities with product quantities
   useState(() => {
     const initialQuantities: Record<string, number> = {};
@@ -92,24 +75,29 @@ export default function SingleUndeliveredPage({
   };
 
   const showPreview = () => {
-    const selectedProductsData = dealerData.products.filter(
+    const selectedProductsData = dealerData?.products?.filter(
       (product) => selectedProducts[product._id]
     );
 
     if (selectedProductsData.length === 0) {
-      alert("Please select at least one product for delivery");
+      toast.warning("Please select at least one product for delivery", {
+        position: "top-center",
+      });
       return;
     }
 
     // Check if any selected product has a delivery quantity of 0
-    const hasZeroQuantity = selectedProductsData.some(
+    const hasZeroQuantity = selectedProductsData?.some(
       (product) =>
         !deliveryQuantities[product._id] ||
         deliveryQuantities[product._id] === 0
     );
 
     if (hasZeroQuantity) {
-      alert("Please enter a quantity greater than 0 for all selected products");
+      toast.warning(
+        "Please enter a quantity greater than 0 for all selected products",
+        { position: "top-center" }
+      );
       return;
     }
 
@@ -121,7 +109,7 @@ export default function SingleUndeliveredPage({
     setIsLoading(true);
 
     try {
-      const selectedProductsData = dealerData.products.filter(
+      const selectedProductsData = dealerData?.products?.filter(
         (product) => selectedProducts[product._id]
       );
 
@@ -133,8 +121,8 @@ export default function SingleUndeliveredPage({
           productCode: product.productCode,
           orderCode: product.orderCode,
           quantity: deliveryQuantities[product._id],
-          price: product.price,
-          total: deliveryQuantities[product._id] * product.price,
+          price: product?.price,
+          total: deliveryQuantities[product?._id] * product?.price,
         })),
         totalAmount: selectedProductsData.reduce(
           (sum, product) =>
@@ -168,8 +156,7 @@ export default function SingleUndeliveredPage({
       // Reset selections after successful delivery
       resetSelections();
     } catch (error) {
-      console.error("Error processing delivery:", error);
-      alert("Failed to process delivery. Please try again.");
+      toast.warning("Failed to process delivery. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -202,15 +189,17 @@ export default function SingleUndeliveredPage({
 
     // Add product table
     const tableColumn = [
-      "Product Code",
       "Order Code",
+      "Product Code",
+      "Product Name",
       "Quantity",
       "Price",
       "Total",
     ];
     const tableRows = selectedProductsData.map((product) => [
-      product.productCode,
       product.orderCode,
+      product.productCode,
+      product?.product?.name,
       deliveryQuantities[product._id],
       product.price,
       deliveryQuantities[product._id] * product.price,
@@ -233,11 +222,16 @@ export default function SingleUndeliveredPage({
     // Get the final Y position after the table
     const finalY = (doc as any).lastAutoTable.finalY || 150;
 
-    doc.text(`Total Amount: ${total}`, 14, finalY + 10);
+    doc.text(`Total Delivered Amount: ${total}`, 14, finalY + 10);
 
     // Add signature fields
     doc.text("Dealer Signature: _________________", 14, finalY + 25);
     doc.text("Company Representative: _________________", 14, finalY + 35);
+    doc.text(
+      `Total Undelivered Amount: ${dealerData.totalUndeliveredAmount - total}`,
+      14,
+      finalY + 64
+    );
 
     // Save the PDF
     doc.save("dealer_delivery_receipt.pdf");
@@ -261,15 +255,17 @@ export default function SingleUndeliveredPage({
 
     // Add product table
     const tableColumn = [
-      "Product Code",
       "Order Code",
+      "Product Code",
+      "Product Name",
       "Quantity",
       "Price",
       "Total",
     ];
-    const tableRows = selectedProductsData.map((product) => [
-      product.productCode,
+    const tableRows = selectedProductsData?.map((product) => [
       product.orderCode,
+      product.productCode,
+      product?.product?.name,
       deliveryQuantities[product._id],
       product.price,
       deliveryQuantities[product._id] * product.price,
@@ -292,7 +288,7 @@ export default function SingleUndeliveredPage({
     // Get the final Y position after the table
     const finalY = (doc as any).lastAutoTable.finalY || 150;
 
-    doc.text(`Total Amount: ${total}`, 14, finalY + 10);
+    doc.text(`Total Delivered Amount: ${total}`, 14, finalY + 10);
 
     // Add signature fields
     doc.text("Dealer Signature: _________________", 14, finalY + 25);
@@ -302,7 +298,7 @@ export default function SingleUndeliveredPage({
     doc.text("Internal Use Only:", 14, finalY + 50);
     doc.text(`Delivery ID: ${Date.now()}`, 14, finalY + 57);
     doc.text(
-      `Total Undelivered Amount: ${dealerData.totalUndeliveredAmount}`,
+      `Total Undelivered Amount: ${dealerData.totalUndeliveredAmount - total}`,
       14,
       finalY + 64
     );
@@ -312,15 +308,17 @@ export default function SingleUndeliveredPage({
   };
 
   // Get selected products for preview
-  const selectedProductsData = dealerData.products.filter(
+  const selectedProductsData = dealerData?.products?.filter(
     (product) => selectedProducts[product._id]
   );
 
   // Calculate total amount for selected products
-  const totalAmount = selectedProductsData.reduce(
+  const totalAmount = selectedProductsData?.reduce(
     (sum, product) => sum + deliveryQuantities[product._id] * product.price,
     0
   );
+
+  console.log(dealerData);
 
   return (
     <div className="container mx-auto py-6">
@@ -369,10 +367,10 @@ export default function SingleUndeliveredPage({
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="grid grid-cols-2 gap-2">
+                  {/* <div className="grid grid-cols-2 gap-2">
                     <div className="font-medium">Total Balance:</div>
                     <div>{dealerData.dealer.money}</div>
-                  </div>
+                  </div> */}
                   <div className="grid grid-cols-2 gap-2">
                     <div className="font-medium">Undelivered Amount:</div>
                     <div>{dealerData.totalUndeliveredAmount}</div>
@@ -395,8 +393,10 @@ export default function SingleUndeliveredPage({
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[50px]">Select</TableHead>
-                    <TableHead>Product Code</TableHead>
                     <TableHead>Order Code</TableHead>
+                    <TableHead>Product Code</TableHead>
+                    <TableHead>Product Name</TableHead>
+
                     <TableHead>Available Quantity</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Total</TableHead>
@@ -404,7 +404,7 @@ export default function SingleUndeliveredPage({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {dealerData.products.map((product) => (
+                  {dealerData?.products?.map((product) => (
                     <TableRow key={product._id}>
                       <TableCell>
                         <Checkbox
@@ -414,17 +414,18 @@ export default function SingleUndeliveredPage({
                           }
                         />
                       </TableCell>
-                      <TableCell>{product.productCode}</TableCell>
                       <TableCell>{product.orderCode}</TableCell>
+                      <TableCell>{product.productCode}</TableCell>
+                      <TableCell>{product?.product?.name}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
                       <TableCell>{product.price}</TableCell>
                       <TableCell>{product.total}</TableCell>
                       <TableCell>
                         <Input
                           type="number"
-                          min="0"
-                          max={product.quantity}
-                          value={deliveryQuantities[product._id] || 0}
+                          min="1"
+                          max={product?.quantity}
+                          value={deliveryQuantities[product._id] || 1}
                           onChange={(e) =>
                             handleQuantityChange(product._id, e.target.value)
                           }
