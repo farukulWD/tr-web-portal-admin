@@ -22,6 +22,7 @@ import {
 import {
   useApprovedOrderMutation,
   useGetSingleDoQuery,
+  useRejectOrderMutation,
 } from "@/redux/api/doApi/doApi";
 import { globalErrorHandler } from "@/utils";
 import dayjs from "dayjs";
@@ -31,6 +32,7 @@ import {
   CheckCircle,
   Clock,
   Download,
+  LoaderIcon,
   Phone,
   Printer,
   Store,
@@ -44,6 +46,7 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
   const { data, isLoading } = useGetSingleDoQuery(orderId, { skip: !orderId });
   const [approvedOrder, { isLoading: approveLoading }] =
     useApprovedOrderMutation();
+  const [rejectOrder, { isLoading: rejectLoading }] = useRejectOrderMutation();
   const printRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const orderData = data?.data;
@@ -120,7 +123,18 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
     }
   };
 
- 
+  const handleRejectOrder = async () => {
+    if (orderData?._id) {
+      try {
+        const result = await rejectOrder(orderData?._id).unwrap();
+        if (result) {
+          toast.success("Order rejected successfully");
+        }
+      } catch (error) {
+        globalErrorHandler(error);
+      }
+    }
+  };
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -129,7 +143,10 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <ArrowBigLeft className="cursor-pointer" onClick={()=>router.back()} />
+              <ArrowBigLeft
+                className="cursor-pointer"
+                onClick={() => router.back()}
+              />
               <h1 className="text-3xl font-bold">
                 Order #{orderData?.orderCode}
               </h1>
@@ -245,13 +262,23 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
                 </span>
               </div>
               <div className="flex gap-4">
-                {!orderData?.approved && (
-                  <Button variant="outline" className="w-32">
+                {!orderData?.approved && orderData?.status !== "canceled" && (
+                  <Button
+                    onClick={handleRejectOrder}
+                    disabled={rejectLoading}
+                    variant="outline"
+                    className="w-32"
+                  >
                     Reject
+                    {rejectLoading && (
+                      <span className="ml-2 animate-spin">
+                        <LoaderIcon className="h-4 w-4" />
+                      </span>
+                    )}
                   </Button>
                 )}
 
-                {!orderData?.approved && (
+                {!orderData?.approved && orderData?.status !== "canceled" && (
                   <Button
                     disabled={approveLoading}
                     onClick={handleApprove}
@@ -260,7 +287,7 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
                     Approve
                     {approveLoading && (
                       <span className="ml-2 animate-spin">
-                        <Download className="h-4 w-4" />
+                        <LoaderIcon className="h-4 w-4" />
                       </span>
                     )}
                   </Button>

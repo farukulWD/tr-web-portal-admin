@@ -23,6 +23,13 @@ const doApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["do", "undelivered"],
     }),
+    rejectOrder: builder.mutation({
+      query: (id) => ({
+        url: `/do/reject-do/${id}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["do", "undelivered"],
+    }),
     getAllUndelivered: builder.query({
       query: () => ({
         url: `/do/get-all-undelivered-products`,
@@ -44,6 +51,7 @@ export const {
   useGetAllDoQuery,
   useGetSingleDoQuery,
   useApprovedOrderMutation,
+  useRejectOrderMutation,
   useGetAllUndeliveredQuery,
   useSingleUndeliveredQuery,
 
