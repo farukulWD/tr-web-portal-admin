@@ -13,7 +13,7 @@ function TransactionComponents({
   isLoading: boolean;
 }) {
 
-    console.log(data)
+   
   const columns: ColumnConfig<TBalace>[] = [
     {
       key: "amount",

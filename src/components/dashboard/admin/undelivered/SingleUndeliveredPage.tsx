@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -28,6 +27,25 @@ import autoTable from "jspdf-autotable";
 import { useSingleUndeliveredQuery } from "@/redux/api/doApi/doApi";
 import GlobalSkeletonTable from "@/components/shared/global/GlobalSkeletonTable";
 import { toast } from "sonner";
+import { useMakeDeliveredMutation } from "@/redux/api/deliveredApi/deliveredApi";
+
+export interface IDeliveredProduct {
+  product: string;
+  quantity: number;
+  price: number;
+  total: number;
+  orderCode: string;
+  doDate: Date;
+  productCode: number;
+}
+
+// Type for the delivered document
+export interface IDelivered {
+  dealer: string;
+  dealerCode: number;
+  totalDeliveredAmount: number;
+  products: IDeliveredProduct[];
+}
 
 export default function SingleUndeliveredPage({
   undeliveredId,
@@ -46,10 +64,10 @@ export default function SingleUndeliveredPage({
     undeliveredId,
     { skip: !undeliveredId }
   );
+  const [makeDelivered] = useMakeDeliveredMutation();
 
   const dealerData = data?.data;
 
-  console.log(JSON.stringify(dealerData))
   // Initialize delivery quantities with product quantities
   useState(() => {
     const initialQuantities: Record<string, number> = {};
@@ -114,22 +132,23 @@ export default function SingleUndeliveredPage({
       );
 
       // Prepare data for API
-      const deliveryData = {
-        dealerId: dealerData.dealer._id,
+      const deliveryData: IDelivered = {
+        dealer: dealerData.dealer._id,
+        dealerCode: dealerData?.dealerCode,
         products: selectedProductsData.map((product) => ({
-          productId: product._id,
+          product: product._id,
           productCode: product.productCode,
           orderCode: product.orderCode,
           quantity: deliveryQuantities[product._id],
           price: product?.price,
           total: deliveryQuantities[product?._id] * product?.price,
+          doDate: product?.doDate,
         })),
-        totalAmount: selectedProductsData.reduce(
+        totalDeliveredAmount: selectedProductsData.reduce(
           (sum, product) =>
             sum + deliveryQuantities[product._id] * product.price,
           0
         ),
-        deliveryDate: new Date().toISOString(),
       };
 
       // Call API to save delivery data
@@ -145,6 +164,17 @@ export default function SingleUndeliveredPage({
       // if (!response.ok) {
       //   throw new Error("Failed to process delivery")
       // }
+      try {
+        const response = await makeDelivered({
+          undeliveredId,
+          deliveredData: deliveryData,
+        }).unwrap();
+        console.log(response);
+      } catch (error) {
+        if (error) {
+          throw new Error("Failed to process delivery");
+        }
+      }
 
       // If API call is successful, generate PDFs
       generateDealerPDF(selectedProductsData);
@@ -318,8 +348,6 @@ export default function SingleUndeliveredPage({
     0
   );
 
-  console.log(dealerData);
-
   return (
     <div className="container mx-auto py-6">
       <h1 className="text-2xl font-bold mb-6">Single Undelivered</h1>
@@ -442,7 +470,7 @@ export default function SingleUndeliveredPage({
 
           <div className="flex justify-end">
             <Button onClick={showPreview} size="lg">
-              Process Delivery & Print PDFs
+              Process Delivery
             </Button>
           </div>
 

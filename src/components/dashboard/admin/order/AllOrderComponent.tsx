@@ -10,7 +10,7 @@ import React from "react";
 
 function AllOrderComponent() {
   const { data, isLoading } = useGetAllDoQuery(undefined);
-  console.log(data?.data);
+
   const columns: ColumnConfig<any>[] = [
     {
       key: "orderCode",
