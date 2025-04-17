@@ -64,7 +64,7 @@ export default function SingleUndeliveredPage({
   const [isLoading, setIsLoading] = useState(false);
   const { data, isLoading: dataLoading } = useSingleUndeliveredQuery(
     undeliveredId,
-    { skip: !undeliveredId , refetchOnMountOrArgChange: true}
+    { skip: !undeliveredId, refetchOnMountOrArgChange: true }
   );
   const [makeDelivered] = useMakeDeliveredMutation();
 
@@ -96,7 +96,7 @@ export default function SingleUndeliveredPage({
 
   const showPreview = () => {
     const selectedProductsData = dealerData?.products?.filter(
-      (product:any) => selectedProducts[product._id]
+      (product: any) => selectedProducts[product._id]
     );
 
     if (selectedProductsData.length === 0) {
@@ -108,7 +108,7 @@ export default function SingleUndeliveredPage({
 
     // Check if any selected product has a delivery quantity of 0
     const hasZeroQuantity = selectedProductsData?.some(
-      (product) =>
+      (product: any) =>
         !deliveryQuantities[product._id] ||
         deliveryQuantities[product._id] === 0
     );
@@ -130,15 +130,14 @@ export default function SingleUndeliveredPage({
 
     try {
       const selectedProductsData = dealerData?.products?.filter(
-        (product) => selectedProducts[product._id]
+        (product: any) => selectedProducts[product._id]
       );
 
       // Prepare data for API
       const deliveryData: IDelivered = {
         dealer: dealerData.dealer._id,
         dealerCode: dealerData?.dealerCode,
-        products: selectedProductsData.map((product) => {
-          console.log(product)
+        products: selectedProductsData.map((product: any) => {
           return {
             product: product?.product?._id,
             productCode: product.productCode,
@@ -148,10 +147,10 @@ export default function SingleUndeliveredPage({
             total: deliveryQuantities[product?._id] * product?.price,
             doDate: product?.doDate,
             undeliveredPId: product._id,
-          }
+          };
         }),
         totalDeliveredAmount: selectedProductsData.reduce(
-          (sum, product) =>
+          (sum: any, product: any) =>
             sum + deliveryQuantities[product._id] * product.price,
           0
         ),
@@ -201,7 +200,7 @@ export default function SingleUndeliveredPage({
   const resetSelections = () => {
     setSelectedProducts({});
     const initialQuantities: Record<string, number> = {};
-    dealerData.products.forEach((product) => {
+    dealerData.products.forEach((product: any) => {
       initialQuantities[product._id] = 0;
     });
     setDeliveryQuantities(initialQuantities);
@@ -232,7 +231,7 @@ export default function SingleUndeliveredPage({
       "Price",
       "Total",
     ];
-    const tableRows = selectedProductsData.map((product) => [
+    const tableRows = selectedProductsData.map((product: any) => [
       product.orderCode,
       product.productCode,
       product?.product?.name,
@@ -251,7 +250,8 @@ export default function SingleUndeliveredPage({
 
     // Calculate total
     const total = selectedProductsData.reduce(
-      (sum, product) => sum + deliveryQuantities[product._id] * product.price,
+      (sum: any, product: any) =>
+        sum + deliveryQuantities[product._id] * product.price,
       0
     );
 
@@ -298,7 +298,7 @@ export default function SingleUndeliveredPage({
       "Price",
       "Total",
     ];
-    const tableRows = selectedProductsData?.map((product) => [
+    const tableRows = selectedProductsData?.map((product: any) => [
       product.orderCode,
       product.productCode,
       product?.product?.name,
@@ -317,7 +317,8 @@ export default function SingleUndeliveredPage({
 
     // Calculate total
     const total = selectedProductsData.reduce(
-      (sum, product) => sum + deliveryQuantities[product._id] * product.price,
+      (sum: any, product: any) =>
+        sum + deliveryQuantities[product._id] * product.price,
       0
     );
 
@@ -345,20 +346,15 @@ export default function SingleUndeliveredPage({
 
   // Get selected products for preview
   const selectedProductsData = dealerData?.products?.filter(
-    (product) => selectedProducts[product._id]
+    (product: any) => selectedProducts[product._id]
   );
 
   // Calculate total amount for selected products
   const totalAmount = selectedProductsData?.reduce(
-    (sum, product) => sum + deliveryQuantities[product._id] * product.price,
+    (sum: any, product: any) =>
+      sum + deliveryQuantities[product._id] * product.price,
     0
   );
-
-
-
-const example = data?.data?.products?.map((p) => {
-  console.log(p)
-})
 
   return (
     <div className="container mx-auto py-6">
@@ -444,7 +440,7 @@ const example = data?.data?.products?.map((p) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {dealerData?.products?.map((product) => (
+                  {dealerData?.products?.map((product: any) => (
                     <TableRow key={product._id}>
                       <TableCell>
                         <Checkbox
@@ -525,7 +521,7 @@ const example = data?.data?.products?.map((p) => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {selectedProductsData.map((product) => (
+                      {selectedProductsData.map((product: any) => (
                         <TableRow key={product._id}>
                           <TableCell>{product.productCode}</TableCell>
                           <TableCell>{product.orderCode}</TableCell>
