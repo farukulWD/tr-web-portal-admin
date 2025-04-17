@@ -87,12 +87,12 @@ const UsersTable = () => {
       render: (_, item) => {
         return (
           <div className="flex justify-between items-center w-full">
-            <Link
+            {/* <Link
               href={`/dashboard/admin/administration/product-management/add-product/?id=${item?._id}`}
               className="flex justify-center items-center w-full"
             >
               <Settings2 className="size-5 text-green-500 cursor-pointer" />
-            </Link>
+            </Link> */}
 
             <DropdownMenu>
               <DropdownMenuTrigger>

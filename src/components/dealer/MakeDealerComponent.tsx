@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { globalErrorHandler } from "@/utils";
 import { toast } from "sonner";
 import { TResponse } from "@/types";
+import { useRouter } from "next-nprogress-bar";
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -64,6 +65,7 @@ export type MakeDealerFormData = {
 
 function MakeDealerComponent({ id }: { id: string }) {
   const [createDeler, { isLoading }] = useCreateDelerMutation();
+  const router = useRouter()
   const [photos, setPhotos] = useState({
     nidPic: "",
     refNid: "",
@@ -87,6 +89,7 @@ function MakeDealerComponent({ id }: { id: string }) {
       const res: TResponse<any> = await createDeler(formData).unwrap();
       if (res) {
         toast.success(res?.message);
+        router.push(`/dashboard/admin/administration/user-management/all-user`)
       }
     } catch (error) {
       globalErrorHandler(error);

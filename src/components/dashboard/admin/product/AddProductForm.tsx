@@ -55,14 +55,6 @@ export function AddProductForm() {
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productValidationSchema),
-    defaultValues: {
-      name: "Door 1",
-      price: 2,
-      description: "This is awesome door",
-      stock: 3,
-      group: "door",
-      image: "https://i.ibb.co.com/k5FYb2G/image.png",
-    },
   });
 
   const { reset } = form;

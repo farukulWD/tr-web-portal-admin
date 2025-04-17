@@ -59,6 +59,7 @@ type singUpFormValues = z.infer<typeof singUpValidationSchema>;
 
 export function SingUpForm() {
   const [createUser, { isLoading }] = useCreateUserMutation();
+  const router = useRouter()
 
   async function handleRegister(formData: singUpFormValues) {
     const userData = { userData: formData };
@@ -71,6 +72,7 @@ export function SingUpForm() {
       const res: TResponse<any> = await createUser(data).unwrap();
       if (res) {
         toast.success(res.message);
+        router.push(`/dashboard/admin/administration/user-management/all-user`)
       }
     } catch (error) {
       globalErrorHandler(error);
