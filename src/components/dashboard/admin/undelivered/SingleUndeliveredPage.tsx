@@ -37,6 +37,8 @@ export interface IDeliveredProduct {
   orderCode: string;
   doDate: Date;
   productCode: number;
+  undeliveredPId: string;
+  _id?: string;
 }
 
 // Type for the delivered document
@@ -62,7 +64,7 @@ export default function SingleUndeliveredPage({
   const [isLoading, setIsLoading] = useState(false);
   const { data, isLoading: dataLoading } = useSingleUndeliveredQuery(
     undeliveredId,
-    { skip: !undeliveredId }
+    { skip: !undeliveredId , refetchOnMountOrArgChange: true}
   );
   const [makeDelivered] = useMakeDeliveredMutation();
 
@@ -94,7 +96,7 @@ export default function SingleUndeliveredPage({
 
   const showPreview = () => {
     const selectedProductsData = dealerData?.products?.filter(
-      (product) => selectedProducts[product._id]
+      (product:any) => selectedProducts[product._id]
     );
 
     if (selectedProductsData.length === 0) {
@@ -135,15 +137,19 @@ export default function SingleUndeliveredPage({
       const deliveryData: IDelivered = {
         dealer: dealerData.dealer._id,
         dealerCode: dealerData?.dealerCode,
-        products: selectedProductsData.map((product) => ({
-          product: product._id,
-          productCode: product.productCode,
-          orderCode: product.orderCode,
-          quantity: deliveryQuantities[product._id],
-          price: product?.price,
-          total: deliveryQuantities[product?._id] * product?.price,
-          doDate: product?.doDate,
-        })),
+        products: selectedProductsData.map((product) => {
+          console.log(product)
+          return {
+            product: product?.product?._id,
+            productCode: product.productCode,
+            orderCode: product.orderCode,
+            quantity: deliveryQuantities[product._id],
+            price: product?.price,
+            total: deliveryQuantities[product?._id] * product?.price,
+            doDate: product?.doDate,
+            undeliveredPId: product._id,
+          }
+        }),
         totalDeliveredAmount: selectedProductsData.reduce(
           (sum, product) =>
             sum + deliveryQuantities[product._id] * product.price,
@@ -176,7 +182,7 @@ export default function SingleUndeliveredPage({
         }
       }
 
-      // If API call is successful, generate PDFs
+      // // If API call is successful, generate PDFs
       generateDealerPDF(selectedProductsData);
       generateCompanyPDF(selectedProductsData);
 
@@ -347,6 +353,12 @@ export default function SingleUndeliveredPage({
     (sum, product) => sum + deliveryQuantities[product._id] * product.price,
     0
   );
+
+
+
+const example = data?.data?.products?.map((p) => {
+  console.log(p)
+})
 
   return (
     <div className="container mx-auto py-6">
