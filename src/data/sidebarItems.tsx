@@ -78,6 +78,20 @@ export const sideBarData: navData[] = [
           },
         ],
       },
+      {
+        title: "NP",
+        url: "#",
+        items: [
+          {
+            title: "All NP",
+            url: "/dashboard/admin/administration/np-management/all-np",
+          },
+          {
+            title: "Create NP",
+            url: "/dashboard/admin/administration/np-management/create-np",
+          },
+        ],
+      },
     ],
   },
 ];

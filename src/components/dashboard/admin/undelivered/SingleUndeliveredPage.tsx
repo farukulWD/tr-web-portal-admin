@@ -356,6 +356,12 @@ export default function SingleUndeliveredPage({
     0
   );
 
+  const getUndeliveredProducts = dealerData?.products?.filter(
+    (p: any) => p?.quantity !== 0
+  );
+
+ 
+
   return (
     <div className="container mx-auto py-6">
       <h1 className="text-2xl font-bold mb-6">Single Undelivered</h1>
@@ -413,7 +419,7 @@ export default function SingleUndeliveredPage({
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div className="font-medium">Total Products:</div>
-                    <div>{dealerData.products.length}</div>
+                    <div>{getUndeliveredProducts?.length}</div>
                   </div>
                 </div>
               </CardContent>
@@ -440,7 +446,7 @@ export default function SingleUndeliveredPage({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {dealerData?.products?.map((product: any) => (
+                  {getUndeliveredProducts?.map((product: any) => (
                     <TableRow key={product._id}>
                       <TableCell>
                         <Checkbox

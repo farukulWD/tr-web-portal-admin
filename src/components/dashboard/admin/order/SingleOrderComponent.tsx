@@ -229,6 +229,8 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
                     <TableHead>Code</TableHead>
                     <TableHead className="text-right">Quantity</TableHead>
                     <TableHead className="text-right">Unit Price</TableHead>
+                    <TableHead className="text-right">SP</TableHead>
+                    <TableHead className="text-right">NP</TableHead>
                     <TableHead className="text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -244,6 +246,12 @@ function SingleOrderComponent({ orderId }: { orderId: string }) {
                       </TableCell>
                       <TableCell className="text-right">
                         {item?.price}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item?.sp}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {item?.np}
                       </TableCell>
                       <TableCell className="text-right">
                         {item?.price * item?.quantity}
